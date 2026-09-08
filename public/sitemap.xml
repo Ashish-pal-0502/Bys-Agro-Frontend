@@ -3,18 +3,18 @@
 
   <sitemap>
     <loc>http://localhost:3000/static/sitemap.xml</loc>
-    <lastmod>2026-09-01T09:02:02.719Z</lastmod>
+    <lastmod>2026-09-08T06:45:22.906Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>http://localhost:3000/product/sitemap-1.xml</loc>
-    <lastmod>2026-09-01T09:02:02.719Z</lastmod>
+    <lastmod>2026-09-08T06:45:22.906Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>http://localhost:3000/blog/sitemap-1.xml</loc>
-    <lastmod>2026-09-01T09:02:02.719Z</lastmod>
+    <lastmod>2026-09-08T06:45:22.906Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>http://localhost:3000/category/sitemap.xml</loc>
-    <lastmod>2026-09-01T09:02:02.719Z</lastmod>
+    <lastmod>2026-09-08T06:45:22.906Z</lastmod>
   </sitemap>
 </sitemapindex>

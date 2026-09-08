@@ -2,7 +2,8 @@ import { create } from "apisauce";
 
 const apiClient = create({
   // baseURL: "https://bys-agro-backend.onrender.com/api",
-  baseURL: "http://localhost:5000/api",
+  // baseURL: "http://localhost:5000/api",
+  baseURL: "http://3.109.124.131:5000/api",
   // baseURL: "http://192.168.31.106:5000/api",
   withCredentials: true, // refresh token will automatically be sent via cookie
   headers: { Accept: "application/vnd.github.v3+json" },

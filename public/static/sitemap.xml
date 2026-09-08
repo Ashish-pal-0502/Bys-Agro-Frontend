@@ -3,61 +3,61 @@
 
   <url>
     <loc>http://localhost:3000/</loc>
-    <lastmod>2026-09-01T09:02:01.026Z</lastmod>
+    <lastmod>2026-09-08T06:45:22.416Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1</priority>
   </url>
   <url>
     <loc>http://localhost:3000/product</loc>
-    <lastmod>2026-09-01T09:02:01.027Z</lastmod>
+    <lastmod>2026-09-08T06:45:22.417Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://localhost:3000/blogs</loc>
-    <lastmod>2026-09-01T09:02:01.027Z</lastmod>
+    <lastmod>2026-09-08T06:45:22.417Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://localhost:3000/all-products</loc>
-    <lastmod>2026-09-01T09:02:01.027Z</lastmod>
+    <lastmod>2026-09-08T06:45:22.417Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://localhost:3000/about-us</loc>
-    <lastmod>2026-09-01T09:02:01.027Z</lastmod>
+    <lastmod>2026-09-08T06:45:22.417Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://localhost:3000/contact-us</loc>
-    <lastmod>2026-09-01T09:02:01.027Z</lastmod>
+    <lastmod>2026-09-08T06:45:22.417Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://localhost:3000/privacy-policy</loc>
-    <lastmod>2026-09-01T09:02:01.027Z</lastmod>
+    <lastmod>2026-09-08T06:45:22.417Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://localhost:3000/terms-and-conditions</loc>
-    <lastmod>2026-09-01T09:02:01.027Z</lastmod>
+    <lastmod>2026-09-08T06:45:22.417Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://localhost:3000/return-cancellations</loc>
-    <lastmod>2026-09-01T09:02:01.027Z</lastmod>
+    <lastmod>2026-09-08T06:45:22.417Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://localhost:3000/shipping-policy</loc>
-    <lastmod>2026-09-01T09:02:01.027Z</lastmod>
+    <lastmod>2026-09-08T06:45:22.417Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

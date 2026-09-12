@@ -131,7 +131,7 @@ export default function MobileNavbar({
           MOBILE MENU
       ============================== */}
 
-      <div className="fixed top-0 left-0 right-0 bg-[#fffdf9] shadow-[0_20px_50px_rgba(49,38,32,0.15)] rounded-b-3xl z-50 lg:hidden max-h-[90vh] overflow-y-auto animate-mobileMenu">
+      <div id="mobile-menu" className="fixed top-0 left-0 right-0 bg-[#fffdf9] shadow-[0_20px_50px_rgba(49,38,32,0.15)] rounded-b-3xl z-50 lg:hidden max-h-[90vh] overflow-y-auto animate-mobileMenu">
 
         {/* ==============================
             HEADER
@@ -149,6 +149,7 @@ export default function MobileNavbar({
           <button
             onClick={onClose}
             className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-[#faf4ea] text-[#5a5a5a] transition-colors"
+              aria-label="Close menu"
           >
             <X size={20} />
           </button>

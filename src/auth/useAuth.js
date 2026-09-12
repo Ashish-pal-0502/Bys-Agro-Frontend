@@ -1,3 +1,5 @@
+
+
 import { useContext } from "react";
 import AuthContext from "./context";
 import { jwtDecode } from "jwt-decode";
@@ -10,64 +12,43 @@ const useAuth = () => {
     const user = jwtDecode(accessToken);
     setUser(user);
 
-    // Store access token
+    // Store in localStorage (for apiClient x-auth-token header)
     localStorage.setItem("token", accessToken);
-    document.cookie = `token=${accessToken}; path=/; max-age=2592000; SameSite=Lax`; // 30 days
 
-    // Store refresh token (important for logout)
-    if (refreshToken) {
-      localStorage.setItem("refreshToken", refreshToken);
-      document.cookie = `refreshToken=${refreshToken}; path=/; max-age=2592000; SameSite=Lax`; // 30 days
+    // Also set a cookie (for Next.js middleware to read)
+    if (typeof document !== "undefined") {
+      document.cookie = `token=${accessToken}; path=/; max-age=900; SameSite=Lax`;
     }
   };
 
   const logOut = async () => {
     try {
-      // Get refresh token from localStorage
-      const refreshToken = localStorage.getItem("refreshToken");
-
-      if (refreshToken) {
-        // Call logout API with refresh token in body
-        const response = await apiClient.post("/user/logout", {
-          refreshToken: refreshToken,
-        });
-
-        if (!response.ok) {
-          console.error("Logout API failed:", response?.data?.message);
-        }
-      }
+     const res =  await apiClient.post("/user/logout");
+     console.log("res of llout", res)
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
-      // Clear user state
       setUser(null);
-
-      // Remove access token
       localStorage.removeItem("token");
-      document.cookie =
-        "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
 
-      // Remove refresh token
-      localStorage.removeItem("refreshToken");
-      document.cookie =
-        "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
+      // Clear the middleware cookie
+      if (typeof document !== "undefined") {
+        document.cookie =
+          "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
+      }
 
-      // Redirect to home
-      window.location.href = "/";
+      if (typeof window !== "undefined") {
+        window.location.href = "/";
+      }
     }
   };
 
-  // Helper function to get refresh token when needed
-  const getRefreshToken = () => {
-    return localStorage.getItem("refreshToken");
-  };
-
-  // Helper function to get access token
   const getAccessToken = () => {
+    if (typeof window === "undefined") return null;
     return localStorage.getItem("token");
   };
 
-  return { user, logIn, logOut, getRefreshToken, getAccessToken };
+  return { user, logIn, logOut, getAccessToken };
 };
 
 export default useAuth;

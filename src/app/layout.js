@@ -85,12 +85,7 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
-  alternates: {
-    canonical: "/",
-  },
-  other: {
-    // fast2sms: "pIYyy9zgn0hybWArrmG8radveq7xgP4P",
-  },
+
 };
 
 export const viewport = {

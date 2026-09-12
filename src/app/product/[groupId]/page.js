@@ -127,7 +127,7 @@ export default async function ProductPage({ params, searchParams }) {
         url: `${process.env.NEXT_PUBLIC_CLIENT}/product/${groupId}`,
         seller: {
           "@type": "Organization",
-          name: "Ardvera Naturals LLP",
+          name: "Bys Agro",
         },
       },
       sku: product._id || product.visualId,

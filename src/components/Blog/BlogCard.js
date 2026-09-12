@@ -8,8 +8,6 @@ const BlogCard = ({ blogData }) => {
   const words = blogData?.content?.split(/\s+/).length || 0;
   const readTime = Math.ceil(words / 200);
 
-  // console.log("cartda", blogData)
-
   return (
     <div className="bg-[#faf4ea] rounded-2xl overflow-hidden border border-[#e6ded2] hover:shadow-lg transition-shadow duration-300">
       <Link href={`/blogs/${blogData._id}`}>

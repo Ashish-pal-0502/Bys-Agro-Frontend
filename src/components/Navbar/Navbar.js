@@ -205,78 +205,55 @@ const handleLogout = () => {
             {/* =================================
                 SEARCH
             ================================= */}
-<div
+<button
+  type="button"
   onClick={() => router.push("/search")}
-  className="hidden md:inline-flex items-center gap-2.5 h-12 px-4 rounded-full bg-[#efe8dd] cursor-pointer"
+  aria-label="Search products"
+  className="hidden md:inline-flex items-center gap-2.5 h-12 px-4 rounded-full bg-[#efe8dd] cursor-pointer hover:bg-[#e6ded2] transition-colors focus-visible:outline-2 focus-visible:outline-[#c1552c] focus-visible:outline-offset-2"
 >
-  <Search
-    size={18}
-    strokeWidth={1.8}
-    className="shrink-0 text-[#8a8a8a]"
-  />
-
-  {/* <input
-    type="text"
-    // placeholder="Search..."
-    className="w-auto bg-transparent text-sm text-gray-800 placeholder:text-[#8a8a8a] outline-none cursor-pointer"
-    readOnly
-    size={5}
-  /> */}
-</div>
+  <Search size={18} strokeWidth={1.8} className="shrink-0 text-[#8a8a8a]" aria-hidden="true" />
+</button>
 
             {/* =================================
                 CART
             ================================= */}
 
-            <button
-              onClick={handleCartClick}
-              className="hover:scale-105 cursor-pointer transition relative"
-            >
-              <ShoppingCart
-                size={24}
-                strokeWidth={1.7}
-                className="text-[#5a5a5a]"
-              />
+        <button
+  onClick={handleCartClick}
+  className="hover:scale-105 cursor-pointer transition relative"
+  aria-label={`Shopping cart, ${cartCount} ${cartCount === 1 ? "item" : "items"}`}
+>
+  <ShoppingCart size={24} strokeWidth={1.7} className="text-[#5a5a5a]" aria-hidden="true" />
+  {cartCount > 0 && (
+    <span
+      aria-hidden="true"
+      className="absolute -top-3 -right-3 bg-[#c1552c] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center"
+    >
+      {cartCount}
+    </span>
+  )}
+</button>
 
-              {cartCount > 0 && (
-                <span className="absolute -top-3 -right-3 bg-[#c1552c] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </button>
-
-            {/* =================================
-                USER
-            ================================= */}
-
-            {/* <button
-              onClick={handleUserClick}
-              className="cursor-pointer group hidden lg:block"
-            >
-              <User
-                size={24}
-                className="text-[#5a5a5a] group-hover:text-[#c1552c] transition-colors"
-              />
-            </button> */}
-
-            {/* =================================
-    USER DROPDOWN
-================================= */}
+         
 
 <div className="relative" ref={dropdownRef}>
+
+
   <button
-    onClick={handleUserClick}
-    className="cursor-pointer group hidden lg:block relative"
-  >
-    <User
-      size={24}
-      className="text-[#5a5a5a] group-hover:text-[#c1552c] transition-colors"
+  onClick={handleUserClick}
+  className="cursor-pointer group hidden lg:block relative"
+  aria-label={user ? `Account menu for ${user.email}` : "Sign in"}
+  aria-haspopup="menu"
+  aria-expanded={isUserDropdownOpen}
+>
+  <User size={24}       className="text-[#5a5a5a] group-hover:text-[#c1552c] transition-colors"aria-hidden="true" />
+  {user && (
+    <span
+      aria-hidden="true"
+      className="absolute -top-1.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
     />
-    {/* Online indicator */}
-    {user && (
-      <span className="absolute -top-1.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
-    )}
-  </button>
+  )}
+</button>
 
   {/* Dropdown */}
   {isUserDropdownOpen && user && (
@@ -353,12 +330,15 @@ const handleLogout = () => {
                 MOBILE MENU
             ================================= */}
 
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden cursor-pointer  hover:bg-[#e6ded2] rounded-lg transition-colors"
-            >
-              <Menu size={24} className="text-[#4b2e1e]" />
-            </button>
+           <button
+  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+  className="lg:hidden cursor-pointer hover:bg-[#e6ded2] rounded-lg transition-colors"
+  aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+  aria-expanded={isMobileMenuOpen}
+  aria-controls="mobile-menu"
+>
+  <Menu size={24} className="text-[#4b2e1e]" aria-hidden="true" />
+</button>
           </div>
         </div>
       </nav>

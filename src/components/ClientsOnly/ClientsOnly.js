@@ -6,13 +6,14 @@ import ScrollToTop from "./../ScrollToTop/ScrollToTop";
 import Navbar from "./../Navbar/Navbar";
 import AuthContext from "./../../auth/context";
 import CartSidebar from "./../../app/cart/cartSidebar";
-import LoginSidebar from './../Auth/LoginSidebar';
-import VerificationSidebar from './../Auth/VerificationSidebar';
+import LoginSidebar from "./../Auth/LoginSidebar";
+import VerificationSidebar from "./../Auth/VerificationSidebar";
+import toast from "react-hot-toast";
 
 const ClientOnly = ({ children }) => {
   const [user, setUser] = useState();
   const [isCartOpen, setIsCartOpen] = useState(false);
-    const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isVerificationOpen, setIsVerificationOpen] = useState(false);
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
@@ -35,7 +36,7 @@ const ClientOnly = ({ children }) => {
     setIsCartOpen(true);
   };
 
-   // Global function to open cart and login from anywhere
+  // Global function to open cart and login from anywhere
   useEffect(() => {
     // Cart functions
     window.openCartSidebar = () => {
@@ -82,7 +83,6 @@ const ClientOnly = ({ children }) => {
     };
   }, []);
 
-
   // Close cart on navigation (optional - improves UX)
   useEffect(() => {
     const handleRouteChange = () => {
@@ -92,12 +92,31 @@ const ClientOnly = ({ children }) => {
     window.addEventListener("popstate", handleRouteChange);
     return () => window.removeEventListener("popstate", handleRouteChange);
   }, []);
+
+  useEffect(() => {
+  const handleAuthFailed = () => {
+    setUser(null);
+    localStorage.removeItem("token");
+    setIsCartOpen(false);
+    setIsLoginOpen(false);
+    setIsVerificationOpen(false);
+
+    toast.error("Your session has expired. Please log in again.", {
+      id: "session-expired",
+    });
+  };
+
+  window.addEventListener("authFailed", handleAuthFailed);
+  return () => window.removeEventListener("authFailed", handleAuthFailed);
+}, []);
   return (
     <>
       <AuthContext.Provider
         value={{
           user,
           setUser,
+          openLoginModal: () => setIsLoginOpen(true),
+          closeLoginModal: () => setIsLoginOpen(false),
         }}
       >
         <Navbar onCartClick={handleCartOpen} />
@@ -107,7 +126,7 @@ const ClientOnly = ({ children }) => {
         </main>
         <Footer />
         <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-           {/* Login Sidebar */}
+        {/* Login Sidebar */}
         <LoginSidebar
           isOpen={isLoginOpen}
           onClose={() => setIsLoginOpen(false)}

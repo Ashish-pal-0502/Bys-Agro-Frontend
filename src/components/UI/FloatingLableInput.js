@@ -1,6 +1,5 @@
-
-
-import { useState } from "react";
+"use client";
+import { useState, useId } from "react";   
 
 export default function FloatingLabelInput({
   label,
@@ -18,6 +17,9 @@ export default function FloatingLabelInput({
   onPaste,
 }) {
   const [isFocused, setIsFocused] = useState(false);
+  const inputId = useId();                             
+  const errorId = `${inputId}-error`;                  
+  const helperId = `${inputId}-helper`;                
   const hasValue = value && value.length > 0;
   const isActive = isFocused || hasValue;
 
@@ -25,6 +27,7 @@ export default function FloatingLabelInput({
     <div className="relative">
       <div className="relative">
         <input
+          id={inputId}                                  
           type={type}
           name={name}
           value={value}
@@ -36,6 +39,11 @@ export default function FloatingLabelInput({
           maxLength={maxLength}
           pattern={pattern}
           inputMode={inputMode}
+          required={required}                           
+          aria-invalid={!!error}                        
+          aria-describedby={                            
+            error ? errorId : helperText ? helperId : undefined
+          }
           className={`
             w-full px-4 py-3 border rounded-2xl focus:outline-none focus:ring-2 focus:border-transparent
             bg-[#faf4ea] transition-all duration-200 text-[#2b1b12]
@@ -48,6 +56,7 @@ export default function FloatingLabelInput({
           `}
         />
         <label
+          htmlFor={inputId}                             
           className={`
             absolute left-4 transition-all duration-200 pointer-events-none
             ${
@@ -64,10 +73,16 @@ export default function FloatingLabelInput({
       </div>
 
       {helperText && !error && (
-        <p className="text-xs text-[#8a8179] mt-1">{helperText}</p>
+        <p id={helperId} className="text-xs text-[#8a8179] mt-1">  
+          {helperText}
+        </p>
       )}
 
-      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+      {error && (
+        <p id={errorId} role="alert" className="text-xs text-red-500 mt-1"> 
+          {error}
+        </p>
+      )}
     </div>
   );
 }

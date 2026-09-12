@@ -33,7 +33,6 @@ const CompactLinkedOffers = ({
           productId: parentProductId,
         },
       );
-      console.log("link", response)
 
       if (response.data?.offers) {
         setLinkedOffers(response.data.offers.slice(0, 3));

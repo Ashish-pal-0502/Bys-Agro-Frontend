@@ -12,6 +12,7 @@
     "@react-oauth/google": "^0.13.5",
     "apisauce": "^3.2.2",
     "canvas-confetti": "^1.9.4",
+    "firebase": "^12.19.0",
     "framer-motion": "^13.0.0",
     "fs": "^0.0.1-security",
     "html-to-react": "^1.7.0",

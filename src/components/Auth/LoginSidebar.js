@@ -2,20 +2,23 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { useState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
-
 import { X } from "lucide-react";
 import { useCartStore } from "./../../stores/cartStore";
 import useAuth from './../../auth/useAuth';
 import apiClient from './../../api/client';
 import { useRouter } from "next/navigation";
-
-
+import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+} from "firebase/auth";
+import { auth } from './../../utility/firebase';
 export default function LoginSidebar({
   isOpen,
   onClose,
   mobile,
   setMobile,
   setIsVerificationModalOpen,
+  setConfirmationResult
 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -23,6 +26,7 @@ export default function LoginSidebar({
   const { syncCartToBackend } = useCartStore();
   const sidebarRef = useRef(null);
     const router = useRouter();
+      const recaptchaRef = useRef(null);
 
 
   // Close on ESC key
@@ -67,36 +71,69 @@ export default function LoginSidebar({
     setError(value.length !== 10 ? "Mobile number must be 10 digits" : "");
   };
 
-
-const handleSendOtp = async () => {
-  try {
-    setLoading(true);
-
-    // console.log("payload", "/user/login-with-mobile", {
-    //   phone: mobile,
-    // })
-
-    const response = await apiClient.post("/user/login-with-mobile", {
-      phone: mobile,
-    });
-
-    // console.log("response", response)
-
-    if (!response.ok) {
-      toast.error(response?.data?.message || "Failed to send OTP");
-      return;
+    // Setup reCAPTCHA when sidebar opens
+  useEffect(() => {
+    if (!isOpen) return;
+    if (!recaptchaRef.current) {
+      recaptchaRef.current = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        { size: "invisible" }
+      );
     }
+    return () => {
+      // cleanup on close
+      if (recaptchaRef.current) {
+        try {
+          recaptchaRef.current.clear();
+        } catch (_) {}
+        recaptchaRef.current = null;
+      }
+    };
+  }, [isOpen]);
 
-    toast.success(response?.data?.message || "OTP sent successfully");
 
-    onClose();
-    setIsVerificationModalOpen(true);
-  } catch (error) {
-    toast.error(error?.message || "Failed to send OTP");
-  } finally {
-    setLoading(false);
-  }
-};
+  // Firebase-based Send OTP
+  const handleSendOtp = async () => {
+    if (!isMobileValid) return;
+
+    try {
+      setLoading(true);
+      const phoneNumber = `+91${mobile}`;
+
+      const confirmation = await signInWithPhoneNumber(
+        auth,
+        phoneNumber,
+        recaptchaRef.current
+      );
+
+      // pass confirmation up to VerificationSidebar
+      setConfirmationResult(confirmation);
+      toast.success("OTP sent successfully");
+      onClose();
+      setIsVerificationModalOpen(true);
+    } catch (err) {
+      console.error("Send OTP error:", err);
+
+      // reset recaptcha so next attempt works
+      if (recaptchaRef.current) {
+        try {
+          recaptchaRef.current.clear();
+        } catch (_) {}
+        recaptchaRef.current = null;
+      }
+
+      if (err.code === "auth/invalid-phone-number") {
+        toast.error("Invalid phone number");
+      } else if (err.code === "auth/too-many-requests") {
+        toast.error("Too many attempts. Try again later.");
+      } else {
+        toast.error(err?.message || "Failed to send OTP");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
   
   const handleGoogleLogin = async (credentialResponse) => {
     const idToken = credentialResponse?.credential;
@@ -284,6 +321,7 @@ const isDisabled = !isMobileValid;
           </div>
         </div>
       </div>
+      <div id="recaptcha-container"></div>
     </>
   );
 }

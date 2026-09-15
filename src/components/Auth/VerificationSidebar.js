@@ -6,6 +6,7 @@ import React, { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
 import { X, ShieldCheck } from "lucide-react";
 import { useCartStore } from "./../../stores/cartStore";
+import { auth } from './../../utility/firebase';
 
 export default function VerificationSidebar({
   isOpen,
@@ -16,10 +17,12 @@ export default function VerificationSidebar({
   setMobile,
   isEmailMode,
   setIsEmailMode,
+  confirmationResult,    
+  setConfirmationResult, 
 }) {
   const { logIn } = useAuth();
   const { syncCartToBackend } = useCartStore();
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]); 
   const [verifyLoading, setVerifyLoading] = useState(false);
   const [resendLoader, setResendLoader] = useState(false);
   const [resendTimer, setResendTimer] = useState(0);
@@ -109,86 +112,89 @@ export default function VerificationSidebar({
   const otpValue = otp.join("");
 
   const handleVerifyProfile = async () => {
-    if (otpValue.length === 0) {
-      toast.error("Please enter the OTP");
+    if (!confirmationResult) {
+      toast.error("Session expired. Please request a new OTP.");
       return;
     }
-    if (otpValue.length === 4) {
-      const payload = {
-       phone: mobile,
-        otp: otpValue,
-      };
+    if (otpValue.length !== 6) {
+      toast.error("Please enter the 6-digit OTP");
+      return;
+    }
 
-      // console.log("paylod", payload)
+    try {
+      setVerifyLoading(true);
 
-      try {
-        setVerifyLoading(true);
-        const response = await apiClient.post(`/user/verify`, payload);
+      //  Verify OTP with Firebase
+      const userCredential = await confirmationResult.confirm(otpValue);
 
-        // console.log("res of verify", response)
+      //  Get Firebase ID token
+      const firebaseIdToken = await userCredential.user.getIdToken();
 
-        if (!response.ok) {
-          toast.error(response?.data?.message);
-          return;
-        }
+      //  Exchange for your backend session (same shape as app)
+      const response = await apiClient.post("/user/firebase", {
+        idToken: firebaseIdToken,
+      });
 
-        if (response?.data?.user) {
-          // const synced = await syncCartToBackend(
-          //   response?.data?.user?._id,
-          //   apiClient,
-          // );
-          // if (synced) {
-          //   toast.success("Your cart items have been saved to your account!");
-          // }
-        }
-
-        logIn(response?.data?.accessToken, response?.data?.refreshToken);
-
-        // const shouldRedirect = localStorage.getItem("redirectToCheckout");
-        // if (shouldRedirect === "true") {
-        //   localStorage.removeItem("redirectToCheckout");
-        //   window.location.href = "/checkout";
-        //   return;
-        // }
-
-        toast.success(response?.data?.message || "Login successful");
-
-        if (isEmailMode) {
-          setEmail("");
-        } else {
-          setMobile("");
-        }
-        setOtp(["", "", "", ""]);
-        setIsEmailMode(false);
-        onClose();
-      } catch (error) {
-        console.error("API Error:", error);
-        toast.error(error?.message || "Verification Failed");
-      } finally {
-        setVerifyLoading(false);
+      if (!response.ok) {
+        toast.error(response?.data?.message || "Login failed");
+        return;
       }
+
+      const { accessToken, refreshToken, user } = response.data;
+
+      //  Optional: sync cart
+      // if (user?._id) {
+      //   const synced = await syncCartToBackend(user._id, apiClient);
+      //   if (synced) toast.success("Your cart items have been saved!");
+      // }
+
+      logIn(accessToken, refreshToken);
+      toast.success(response?.data?.message || "Login successful");
+
+      // cleanup
+      setMobile("");
+      setOtp(["", "", "", "", "", ""]);
+      setConfirmationResult(null);
+      onClose();
+    } catch (err) {
+      console.error("Verification error:", err);
+      if (err.code === "auth/invalid-verification-code") {
+        toast.error("Invalid OTP. Please try again.");
+      } else if (err.code === "auth/code-expired") {
+        toast.error("OTP expired. Please resend.");
+      } else if (err.code === "auth/too-many-requests") {
+        toast.error("Too many attempts. Try again later.");
+      } else {
+        toast.error(err?.message || "Verification failed");
+      }
+    } finally {
+      setVerifyLoading(false);
     }
   };
 
+  // Resend uses Firebase again
   const handleResendCode = async () => {
+    if (!mobile) return;
     setResendLoader(true);
     try {
-    
-     
-      const response = await apiClient.post("/user/resend-mobile-otp", {
-        mobile,
+      const { RecaptchaVerifier, signInWithPhoneNumber } = await import(
+        "firebase/auth"
+
+      );
+      const verifier = new RecaptchaVerifier(auth, "recaptcha-container-resend", {
+        size: "invisible",
       });
-
-      // console.log("response", response)
-
-      if (!response.ok) {
-        throw new Error("Failed to resend otp");
-      }
-      setResendTimer(180);
-      toast.success(response?.data?.message || "OTP resent successfully");
-    } catch (error) {
-      toast.error(error?.message || "Failed to resend OTP");
-      console.log("Error while sending OTP");
+      const newConfirmation = await signInWithPhoneNumber(
+        auth,
+        `+91${mobile}`,
+        verifier
+      );
+      setConfirmationResult(newConfirmation);
+      setResendTimer(60);
+      toast.success("OTP resent successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to resend OTP");
     } finally {
       setResendLoader(false);
     }
@@ -313,6 +319,7 @@ export default function VerificationSidebar({
           animation: slideIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
       `}</style>
+       <div id="recaptcha-container-resend"></div>
     </>
   );
 }

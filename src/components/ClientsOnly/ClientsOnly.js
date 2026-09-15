@@ -18,6 +18,7 @@ const ClientOnly = ({ children }) => {
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
   const [isEmailMode, setIsEmailMode] = useState(false);
+  const [confirmationResult, setConfirmationResult] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -137,6 +138,7 @@ const ClientOnly = ({ children }) => {
           isEmailMode={isEmailMode}
           setIsEmailMode={setIsEmailMode}
           setIsVerificationModalOpen={setIsVerificationOpen}
+          setConfirmationResult={setConfirmationResult} 
         />
 
         {/* Verification Sidebar */}
@@ -149,6 +151,8 @@ const ClientOnly = ({ children }) => {
           setMobile={setMobile}
           isEmailMode={isEmailMode}
           setIsEmailMode={setIsEmailMode}
+           confirmationResult={confirmationResult} 
+           setConfirmationResult={setConfirmationResult} 
         />
       </AuthContext.Provider>
     </>

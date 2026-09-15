@@ -5,12 +5,17 @@ import ProductImageViewer from "./../../../components/Product/ProductImageViewer
 import ProductDetails from "./../../../components/Product/ProductDetails";
 import apiClient from "../../../api/client";
 import YouMightAlsoLike from "../../../components/YouMightAlsoLike/YouMightAlsoLike";
+import ReviewModal from './../../../components/Models/ReviewModal';
+import CustomerReview from './../../../components/Product/CustomerReview';
+import useAuth from './../../../auth/useAuth';
 
 const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
   const [currentProduct, setCurrentProduct] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [excludeProductId, setExcludeProductId] = useState(products?.[0]?._id);
   const [youMayAlsoLikeProducts, setYouMayAlsoLikeProducts] = useState([]);
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+      const { user } = useAuth();
 
    useEffect(() => {
     if (products?.length > 0 && !isInitialized) {
@@ -49,6 +54,45 @@ const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
     setCurrentProduct(selectedProduct);
     setExcludeProductId(selectedProduct._id);
 
+  };
+
+    const handleCreateReview = async (formData) => {
+    try {
+      if (!user) {
+        toast.error("Please login to write a review");
+        return;
+      }
+
+      console.log(
+        "payload" , formData
+      )
+
+      // const response = await apiClient.post(
+      //   "/product/create-product-review",
+      //   formData,
+      // );
+
+      // if (response.ok) {
+      //   toast.success(response.data.message || "Review added successfully");
+      //   setIsReviewModalOpen(false);
+      //   setTimeout(() => {
+      //     window.location.reload();
+      //   }, 800);
+      // } else {
+      //   toast.error(response.data.message || "Failed to add review");
+      // }
+    } catch (error) {
+      console.error("Error creating review:", error);
+      toast.error("Something went wrong");
+    }
+  };
+
+  const openReviewModal = () => {
+    if (!user) {
+      toast.error("Please login to write a review");
+      return;
+    }
+    setIsReviewModalOpen(true);
   };
 
   if (!currentProduct) {
@@ -91,6 +135,28 @@ const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
           <YouMightAlsoLike youMayAlsoLikeProducts={youMayAlsoLikeProducts} />
         </div>
       )}
+
+
+      
+      {/* ✅ Customer Reviews Section */}
+      <div id="customer-reviews-section" className="w-full lg:max-w-7xl mx-auto">
+        <CustomerReview
+          productId={currentProduct?._id}
+          groupId={currentProduct?.groupId || groupId}
+          handleCreateReview={openReviewModal}
+          currentProduct={currentProduct}
+        />
+      </div>
+
+      {/* ✅ Review Modal */}
+      <ReviewModal
+        isOpen={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)}
+        productId={currentProduct?._id}
+        productName={currentProduct?.name}
+        onReviewSubmit={handleCreateReview}
+        user={user}
+      />
     </div>
   );
 };

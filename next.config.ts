@@ -32,6 +32,12 @@ const nextConfig: NextConfig = {
         hostname: "www.shutterstock.com",
         pathname: "/**",
       },
+       {
+        protocol: "https",
+        hostname: "bys-agro-bucket.s3.ap-south-1.amazonaws.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };

@@ -31,11 +31,11 @@ export function useCheckoutCart({ user, router }) {
         else if (response.data.cart) items = response.data.cart;
       }
 
-      if (items.length === 0) {
-        toast.error("Your cart is empty");
-        router.push("/");
-        return;
-      }
+      // if (items.length === 0) {
+      //   toast.error("Your cart is empty");
+      //   router.push("/");
+      //   return;
+      // }
 
       const deduplicatedItems = deduplicateCartItems(items);
 
@@ -99,19 +99,19 @@ export function useCheckoutCart({ user, router }) {
     }
   }, [user]);
 
-  // ✅ Fetch cart on mount / user change
+  // Fetch cart on mount / user change
   useEffect(() => {
     fetchCartData();
   }, [fetchCartData]);
 
-  // ✅ Apply linked discounts whenever user or cart items change
+  // Apply linked discounts whenever user or cart items change
   useEffect(() => {
     if (user) {
       applyLinkedDiscountsToCart();
     }
   }, [user, cartItems, applyLinkedDiscountsToCart]);
 
-  // ✅ Listen for external cart updates
+  // Listen for external cart updates
   useEffect(() => {
     const handleCartUpdate = () => {
       if (user) {

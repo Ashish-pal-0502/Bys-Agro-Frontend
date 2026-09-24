@@ -452,25 +452,26 @@ export default function CheckoutContent() {
         codHandlingCharge: codHandlingCharge,
       };
 
-      // console.log("pyaload", orderData);
+      console.log("order pyaload", orderData);
 
       const response = await apiClient.post("/order/create-order", orderData);
+
+      console.log(" order response", response);
+
 
       if (response.ok) {
         const orderData = response.data.orders[0];
 
         if (paymentMethod === "cash on delivery") {
-          await apiClient.delete("/cart/clear", {
-            userId: user?.id,
-          });
-
-          useCartStore.getState().clearCart();
-          window.dispatchEvent(new CustomEvent("cartUpdated"));
-          localStorage.removeItem("buyNowItem");
-
           toast.success("Order placed successfully!");
-
           router.replace(`/checkout/success?orderId=${orderData._id}`);
+
+          // await apiClient.delete("/cart/clear", {
+          //   userId: user?.id,
+          // });
+          // useCartStore.getState().clearCart();
+          // window.dispatchEvent(new CustomEvent("cartUpdated"));
+          // localStorage.removeItem("buyNowItem");
 
           return;
         }
@@ -523,6 +524,12 @@ export default function CheckoutContent() {
 
   const verifyOrder = async (orderIds, razorpayPayload) => {
     const idsArray = Array.isArray(orderIds) ? orderIds : [orderIds];
+      console.log(" verifyOrder pyaload", {
+      orderIds: idsArray,
+      razorpay_order_id: razorpayPayload.razorpay_order_id,
+      razorpay_payment_id: razorpayPayload.razorpay_payment_id,
+      razorpay_signature: razorpayPayload.razorpay_signature,
+    });
 
     const response = await apiClient.post("/order/verify-order", {
       orderIds: idsArray,
@@ -531,16 +538,20 @@ export default function CheckoutContent() {
       razorpay_signature: razorpayPayload.razorpay_signature,
     });
 
+          console.log(" verifyOrder response", response);
+
+
     const serverStatus = response?.data?.paymentStatus;
 
     if (response.ok && serverStatus === "completed") {
-      await apiClient.delete("/cart/clear", { userId: user?.id });
-      useCartStore.getState().clearCart();
-      window.dispatchEvent(new CustomEvent("cartUpdated"));
-      localStorage.removeItem("buyNowItem");
-
       toast.success("Order placed successfully!");
       router.replace(`/checkout/success?orderId=${idsArray[0]}`);
+
+      // await apiClient.delete("/cart/clear", { userId: user?.id });
+      // useCartStore.getState().clearCart();
+      // window.dispatchEvent(new CustomEvent("cartUpdated"));
+      // localStorage.removeItem("buyNowItem");
+
     } else if (serverStatus === "failed") {
       toast.error("Payment failed. Please try again.");
     } else {

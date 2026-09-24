@@ -32,12 +32,17 @@ export async function generateMetadata({ params }) {
       : `${process.env.NEXT_PUBLIC_CLIENT}${rawImg}`;
 
     const pageUrl = `${process.env.NEXT_PUBLIC_CLIENT}/product/${groupId}`;
+        const metaTitle =
+      product.metaTitle?.trim() || `${product.name} | Bys Agro`;
+
+    const metaDescription =
+      product.metaDescription?.trim() ||
+      product.description?.substring(0, 160) ||
+      `Buy ${product.name} - authentic products from Bys Agro`;
 
     return {
-      title: `${product.name} | Bys Agro`,
-      description:
-        product.description?.substring(0, 160) ||
-        `Buy ${product.name} - authentic products from Bys Agro`,
+    title: metaTitle,
+      description: metaDescription,
       openGraph: {
         title: `${product.name} | Bys Agro`,
         description:

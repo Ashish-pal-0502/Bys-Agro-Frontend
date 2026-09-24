@@ -3,19 +3,21 @@
 import { useState, useEffect } from "react";
 import ProductImageViewer from "./../../../components/Product/ProductImageViewer";
 import ProductDetails from "./../../../components/Product/ProductDetails";
-import apiClient from "../../../api/client";
 import YouMightAlsoLike from "../../../components/YouMightAlsoLike/YouMightAlsoLike";
 import ReviewModal from './../../../components/Models/ReviewModal';
 import CustomerReview from './../../../components/Product/CustomerReview';
 import useAuth from './../../../auth/useAuth';
+import toast from "react-hot-toast";
+import apiClient from './../../../api/client';
 
 const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
   const [currentProduct, setCurrentProduct] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [excludeProductId, setExcludeProductId] = useState(products?.[0]?._id);
   const [youMayAlsoLikeProducts, setYouMayAlsoLikeProducts] = useState([]);
-    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-      const { user } = useAuth();
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reviewRefreshKey, setReviewRefreshKey] = useState(0);
+  const { user } = useAuth();
 
    useEffect(() => {
     if (products?.length > 0 && !isInitialized) {
@@ -63,24 +65,19 @@ const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
         return;
       }
 
-      console.log(
-        "payload" , formData
-      )
 
-      // const response = await apiClient.post(
-      //   "/product/create-product-review",
-      //   formData,
-      // );
+      const response = await apiClient.post(
+        "/product/create-product-review",
+        formData,
+      );
 
-      // if (response.ok) {
-      //   toast.success(response.data.message || "Review added successfully");
-      //   setIsReviewModalOpen(false);
-      //   setTimeout(() => {
-      //     window.location.reload();
-      //   }, 800);
-      // } else {
-      //   toast.error(response.data.message || "Failed to add review");
-      // }
+      if (response.ok) {
+        toast.success(response.data.message || "Review added successfully");
+        setIsReviewModalOpen(false);
+        setReviewRefreshKey((k) => k + 1);
+      } else {
+        toast.error(response.data.message || "Failed to add review");
+      }
     } catch (error) {
       console.error("Error creating review:", error);
       toast.error("Something went wrong");
@@ -138,17 +135,18 @@ const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
 
 
       
-      {/* ✅ Customer Reviews Section */}
+      {/*  Customer Reviews Section */}
       <div id="customer-reviews-section" className="w-full lg:max-w-7xl mx-auto">
         <CustomerReview
           productId={currentProduct?._id}
           groupId={currentProduct?.groupId || groupId}
           handleCreateReview={openReviewModal}
           currentProduct={currentProduct}
+            refreshKey={reviewRefreshKey}
         />
       </div>
 
-      {/* ✅ Review Modal */}
+      {/* Review Modal */}
       <ReviewModal
         isOpen={isReviewModalOpen}
         onClose={() => setIsReviewModalOpen(false)}

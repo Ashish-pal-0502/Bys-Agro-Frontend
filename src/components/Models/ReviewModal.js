@@ -85,11 +85,11 @@ const ReviewModal = ({
         image: imageUrls?.length > 0 ? imageUrls : null,
       });
 
-      setRating(0);
-      setComment("");
-      setImageFiles([]);
-      setImageUrls([]);
-      onClose();
+      // setRating(0);
+      // setComment("");
+      // setImageFiles([]);
+      // setImageUrls([]);
+      // onClose();
     } catch (err) {
       toast.error("Failed to submit review");
     } finally {

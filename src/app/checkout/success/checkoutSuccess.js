@@ -6,7 +6,9 @@ import { motion } from "framer-motion";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FaCheckCircle, FaTimesCircle, FaSpinner } from "react-icons/fa";
 import { IoCheckmarkCircle } from "react-icons/io5";
-import apiClient from './../../../api/client';
+import apiClient from "./../../../api/client";
+import { useCartStore } from "./../../../stores/cartStore";
+import useAuth from "./../../../auth/useAuth";
 
 export default function CheckoutSuccess() {
   const searchParams = useSearchParams();
@@ -15,6 +17,8 @@ export default function CheckoutSuccess() {
   const [order, setOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuth();
+  // console.log(" order id", orderId)
 
   const fetchOrderDetails = async () => {
     try {
@@ -22,6 +26,8 @@ export default function CheckoutSuccess() {
       const response = await apiClient.get("/order/myorders-details", {
         id: orderId,
       });
+
+      // console.log("response fetch order", response)
 
       if (response.ok || response.data) {
         setOrder(response.data);
@@ -45,6 +51,26 @@ export default function CheckoutSuccess() {
   useEffect(() => {
     window.history.replaceState(null, "", "/checkout/success");
   }, []);
+
+  //  Clear cart on the success page — after checkout has fully unmounted
+  useEffect(() => {
+    const clearCart = async () => {
+      try {
+        if (user?.id) {
+         const res =  await apiClient.delete("/cart/clear", { userId: user.id });
+         console.log(" response fetch order", res)
+        }
+      } catch (err) {
+        console.error("Failed to clear cart on server:", err);
+      } finally {
+        useCartStore.getState().clearCart();
+        window.dispatchEvent(new CustomEvent("cartUpdated"));
+        localStorage.removeItem("buyNowItem");
+      }
+    };
+
+    clearCart();
+  }, [user?.id]);
 
   const handleNavigateToOrders = () => {
     router.replace("/orders");
@@ -72,7 +98,9 @@ export default function CheckoutSuccess() {
           <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <FaTimesCircle className="w-12 h-12 text-red-500" />
           </div>
-          <h1 className="text-2xl font-bold text-[#2b1b12] mb-3">Something went wrong</h1>
+          <h1 className="text-2xl font-bold text-[#2b1b12] mb-3">
+            Something went wrong
+          </h1>
           <p className="text-gray-600 mb-6">{error}</p>
           <button
             onClick={handleNavigateToHome}

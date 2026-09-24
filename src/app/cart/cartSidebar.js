@@ -355,6 +355,7 @@ export default function CartSidebar({ isOpen, onClose }) {
     if (!user) {
       onClose();
       localStorage.setItem("redirectToCheckout", "true");
+        window.openLoginSidebar?.();  
       return;
     }
 

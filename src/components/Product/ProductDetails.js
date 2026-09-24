@@ -304,15 +304,23 @@ const handleBuyNow = async () => {
         </h2>
 
         {/* Rating */}
-        <div className="flex items-center gap-2 mt-2">
-          <div className="flex items-center gap-1">{renderStars()}</div>
-          <span className="text-[17px] font-semibold text-[#1A3232]">
-            {currentProduct?.rating?.toFixed(1) || "0.0"}
-          </span>
-          <span className="text-sm text-gray-500">
-            ({currentProduct?.reviews || 0} reviews)
-          </span>
-        </div>
+<div className="flex items-center gap-2 mt-2">
+  <div className="flex items-center gap-1">{renderStars()}</div>
+  <span className="text-[17px] font-semibold text-[#1A3232]">
+    {typeof currentProduct?.rating === "number"
+      ? currentProduct.rating.toFixed(1)
+      : "0.0"}
+  </span>
+  <span className="text-sm text-gray-500">
+    (
+    {Array.isArray(currentProduct?.reviews)
+      ? currentProduct.reviews.length
+      : typeof currentProduct?.reviews === "number"
+      ? currentProduct.reviews
+      : 0}{" "}
+    reviews)
+  </span>
+</div>
 
         {/* Price */}
         <div className="my-3">

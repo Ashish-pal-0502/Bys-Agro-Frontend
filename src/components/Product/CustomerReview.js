@@ -1,11 +1,10 @@
 
-
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import CustomerRatingCard from "../Cards/CustomerRatingCard";
 import apiClient from "./../../api/client";
-import { FiMessageSquare, FiPlus } from "react-icons/fi";
+import { FiMessageSquare, FiPlus, FiStar } from "react-icons/fi";
 import { TbLeaf } from "react-icons/tb";
 import useAuth from "./../../auth/useAuth";
 import Pagination from "./../../utility/pagination";
@@ -15,10 +14,13 @@ function CustomerReview({
   handleCreateReview,
   currentProduct,
   groupId,
+   refreshKey = 0, 
 }) {
   const [reviews, setReviews] = useState([]);
-  const [allData, setAllData] = useState([]);
-  const [totalReviews, setTotalReviews] = useState(0);
+  const [stats, setStats] = useState({
+    averageRating: 0,
+    totalReviews: 0,
+  });
   const { user } = useAuth();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,7 +28,7 @@ function CustomerReview({
 
   useEffect(() => {
     getProductReview();
-  }, [currentPage, currentProduct]);
+  }, [currentPage, currentProduct, refreshKey]);
 
   const getProductReview = async () => {
     try {
@@ -39,14 +41,18 @@ function CustomerReview({
         },
       );
 
-      setAllData(response.data);
-      setReviews(response.data.reviews);
-      setTotalReviews(response.data.totalReviews);
-      setTotalPages(response.data.pageCount || 1);
+      const data = response?.data ?? {};
+
+      setReviews(Array.isArray(data.reviews) ? data.reviews : []);
+      setStats({
+        averageRating: Number(data.averageRating) || 0,
+        totalReviews: Number(data.totalReviews) || 0,
+      });
+      setTotalPages(data.pageCount || 1);
     } catch (error) {
       console.error("Failed to fetch product reviews:", error);
       setReviews([]);
-      setTotalReviews(0);
+      setStats({ averageRating: 0, totalReviews: 0 });
       setTotalPages(1);
     }
   };
@@ -56,32 +62,11 @@ function CustomerReview({
     setCurrentPage(page);
   };
 
-  const staticRatings = {
-    "RAW-WILD-FOREST-HONEY": { rating: 4.6, reviews: "50+" },
-    "PURE-ACACIA-HONEY": { rating: 4.9, reviews: "100+" },
-    "PURE-JAMUN-HONEY": { rating: 4.8, reviews: "100+" },
-    "PURE-TULSI-HONEY": { rating: 4.8, reviews: "100+" },
-    "PURE-HIMALAYAN-HONEY": { rating: 4.7, reviews: "50+" },
-    "PURE-SUNDERBAN-HONEY": { rating: 4.7, reviews: "50+" },
-    "BLUE-BUTTERFLY-PEA-TEA": { rating: 4.9, reviews: "100+" },
-    "HIBISCUS-PETAL-TEA": { rating: 4.8, reviews: "100+" },
-    "TURMERIC-GREEN-TEA": { rating: 4.7, reviews: "50+" },
-    "MORINGA-GREEN-TEA": { rating: 4.7, reviews: "50+" },
-    "APPLE-CINNAMON-GREEN-TEA": { rating: 4.8, reviews: "50+" },
-    "KASHMIRI-KAHWA": { rating: 4.9, reviews: "100+" },
-  };
-
-  const productKey = currentProduct?.visualId
-    ?.split("-")
-    ?.slice(0, -1)
-    ?.join("-");
-
-  const staticData = staticRatings[productKey] || null;
-  const displayRating = staticData?.rating || 0;
-  const displayReviews = staticData?.reviews || "";
+  const displayRating = stats.averageRating;
+  const displayReviews = stats.totalReviews;
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8  font-sans">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 pb-6 border-b border-[#e8e2d0]">
         <div className="flex items-center gap-3">
@@ -98,7 +83,7 @@ function CustomerReview({
           </div>
         </div>
 
-        {user && reviews?.length > 0 && (
+        {user && reviews.length > 0 && (
           <button
             onClick={handleCreateReview}
             className="group inline-flex items-center gap-2 bg-linear-to-r from-[#2d5016] to-[#4a7c23] text-white px-5 py-2.5 rounded-full font-medium text-sm shadow-lg shadow-[#2d5016]/20 hover:shadow-xl hover:shadow-[#2d5016]/30 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
@@ -109,7 +94,7 @@ function CustomerReview({
         )}
       </div>
 
-      {reviews?.length === 0 ? (
+      {reviews.length === 0 ? (
         /* Empty State */
         <div className="relative overflow-hidden text-center py-16 px-6 rounded-3xl bg-linear-to-br from-[#f5f0e1] via-[#faf6e9] to-[#f5f0e1] border border-[#e8e2d0]">
           <div className="absolute top-0 right-0 w-40 h-40 bg-[#2d5016]/5 rounded-full blur-3xl" />
@@ -154,7 +139,7 @@ function CustomerReview({
             </div>
 
             <div>
-              <div className="flex gap-1 mb-2">
+              {/* <div className="flex gap-1 mb-2">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Image
                     key={i}
@@ -167,7 +152,26 @@ function CustomerReview({
                     }
                   />
                 ))}
-              </div>
+              </div> */}
+
+                <div className="flex items-center gap-0.5 mb-2">
+    {Array.from({ length: 5 }).map((_, i) => {
+      const isFull = i + 1 <= Math.floor(displayRating);
+      const isHalf =
+        !isFull && i < displayRating && displayRating - i >= 0.5;
+
+      return (
+        <FiStar
+          key={i}
+          className={`text-lg ${
+            isFull || isHalf
+              ? "text-[#c9a227] fill-[#c9a227]"
+              : "text-[#d4cdb8]"
+          }`}
+        />
+      );
+    })}
+  </div>
               <p className="text-sm text-[#5a6b4a]">
                 Based on{" "}
                 <span className="font-semibold text-[#2d5016]">
@@ -186,11 +190,11 @@ function CustomerReview({
         </div>
       )}
 
-      {reviews?.length > 0 && (
+      {reviews.length > 0 && (
         <>
           <div className="flex flex-col gap-5">
             {reviews.map((r, i) => (
-              <CustomerRatingCard key={i} {...r} />
+              <CustomerRatingCard key={r?._id || i} {...r} />
             ))}
           </div>
 

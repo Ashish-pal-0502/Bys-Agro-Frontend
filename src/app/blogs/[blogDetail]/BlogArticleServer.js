@@ -21,7 +21,7 @@ export default function BlogArticleServer({ blog }) {
   const readingTime = getReadingTime(blog.content);
 
   return (
-    <div className="bg-[#faf4ea] min-h-screen">
+    <div className="bg-[#faf4ea] min-h-screen font-serif">
       <ShareButton progressOnly />
 
       <div className="max-w-4xl mx-auto px-5 md:px-10 py-8">

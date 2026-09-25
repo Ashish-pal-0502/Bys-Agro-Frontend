@@ -1,41 +1,31 @@
-
-
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import ShopDrawer from "./../Navbar/ShopDrawer";
 
-const HeroBanner = () => {
+const FALLBACK_IMAGES = [
+  {
+    src: "https://bys-agro-bucket.s3.ap-south-1.amazonaws.com/1788846789116_21656542.webp",
+    alt: "Assorted Indian spices",
+  },
+];
+
+const HeroBanner = ({ images = [] }) => {
+
   const router = useRouter();
   const [isShopDrawerOpen, setIsShopDrawerOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const autoPlayRef = useRef(null);
 
-  const images = [
-    {
-      src: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=800&h=600&fit=crop",
-      alt: "Assorted Indian spices",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1673791031093-eb8eefa60083?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3VnYXJ8ZW58MHx8MHx8fDA%3D",
-      alt: "Pulses and dal",
-    },
-    {
-      src: "https://plus.unsplash.com/premium_photo-1671379041175-782d15092945?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZHJ5JTIwZnJ1aXRzfGVufDB8fDB8fHww",
-      alt: "Cooking oils",
-    },
-    {
-      src: "https://media.istockphoto.com/id/478191096/photo/vinaigrette-ingredients-on-rustic-wood-table.webp?a=1&b=1&s=612x612&w=0&k=20&c=CB4YIttj2DhkWSwRq3CqIfj3hkylkHVyvQiJzKT84QY=",
-      alt: "Dry fruits and nuts",
-    },
-  ];
+  // Use backend images if available, otherwise fallback
+  const slides = images.length > 0 ? images : FALLBACK_IMAGES;
 
   useEffect(() => {
     if (isAutoPlaying) {
       autoPlayRef.current = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % images.length);
+        setCurrentIndex((prev) => (prev + 1) % slides.length);
       }, 4000);
     }
 
@@ -44,7 +34,14 @@ const HeroBanner = () => {
         clearInterval(autoPlayRef.current);
       }
     };
-  }, [isAutoPlaying, images.length]);
+  }, [isAutoPlaying, slides.length]);
+
+  // Reset index if slides array shrinks
+  useEffect(() => {
+    if (currentIndex >= slides.length) {
+      setCurrentIndex(0);
+    }
+  }, [slides.length, currentIndex]);
 
   const handleMouseEnter = () => {
     setIsAutoPlaying(false);
@@ -88,7 +85,7 @@ const HeroBanner = () => {
             >
               <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-2xl sm:rounded-3xl overflow-hidden">
                 <div className="relative w-full h-full">
-                  {images.map((image, index) => (
+                  {slides.map((image, index) => (
                     <div
                       key={index}
                       className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
@@ -99,7 +96,7 @@ const HeroBanner = () => {
                     >
                       <Image
                         src={image.src}
-                        alt={image.alt}
+                        alt={image.alt || "Banner image"}
                         fill
                         className="object-cover"
                         priority={index === 0}
@@ -110,7 +107,7 @@ const HeroBanner = () => {
 
                 {/* Dots Indicator */}
                 <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5 sm:gap-2">
-                  {images.map((_, index) => (
+                  {slides.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => goToSlide(index)}

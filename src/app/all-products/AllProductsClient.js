@@ -273,7 +273,7 @@ const AllProductsClient = ({ initialPage = 1 }) => {
   }
 
   return (
-    <div className="min-h-screen font-figtree bg-[#faf4ea] py-8">
+    <div className="min-h-screen font-serif bg-[#faf4ea] py-8">
       <section className="max-w-7xl mx-auto px-4 lg:px-8">
         <div className="flex flex-row sm:flex-row justify-between items-center sm:items-center mb-6 gap-4">
           <div className="hidden lg:flex items-center gap-6 flex-wrap relative">

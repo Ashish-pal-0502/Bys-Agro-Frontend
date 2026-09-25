@@ -114,7 +114,7 @@ function RefundPolicyPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#faf4ea] ">
+    <div className="min-h-screen bg-[#faf4ea] font-serif">
       
       {/* Header */}
       <section className="bg-white border-b border-[#e6ded2]">

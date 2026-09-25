@@ -27,6 +27,7 @@ import { useCartStore } from "./../../stores/cartStore";
 import { calculateDeliveryFee } from "./../../utility/checkout/shipping";
 import { validateCheckoutForm } from "./../../utility/checkout/validators";
 import Loader from "./../../utility/Loader";
+import { buildOrderItems } from './../../utility/checkout/pricing';
 
 export default function CheckoutContent() {
   const { user } = useAuth();
@@ -164,49 +165,8 @@ export default function CheckoutContent() {
     const weightInGrams = await calculateTotalWeight(cartItems);
     const weightInKg = weightInGrams / 1000;
 
-    const orderItems = cartItems.map((item) => {
-      const isCartItem = !!item.product;
-      const productData = isCartItem ? item.product : item;
-      const quantity = item?.quantity || 1;
 
-      let finalPrice = productData?.price || 0;
-      const originalPrice = productData?.price || 0;
-
-      const discount = productData?.discount || 0;
-      const isFlash = productData?.isFlash && productData?.flash;
-      const flashId = isFlash ? productData.flash._id : null;
-
-      if (isFlash) {
-        const flash = productData.flash;
-        if (flash.discountType === "PERCENT") {
-          finalPrice = finalPrice - (finalPrice * flash.discountValue) / 100;
-        } else if (flash.discountType === "FIXED") {
-          finalPrice = finalPrice - flash.discountValue;
-        }
-      } else if (discount > 0) {
-        finalPrice = finalPrice - (finalPrice * discount) / 100;
-      }
-
-      finalPrice = Math.max(finalPrice, 0);
-
-      return {
-        name: productData?.name || "Product",
-        qty: quantity,
-        image: productData?.images?.[0] || "/icons/honey-jar.png",
-        price: originalPrice,
-        finalPrice: finalPrice,
-        product: productData?._id,
-        flashId: flashId,
-        isCombo: productData?.isCombo || false,
-        itemWeight: parseFloat(productData?.weight || 0),
-        weight: parseFloat(
-          productData?.packageWeight || productData?.weight || 0,
-        ),
-        height: productData?.height || 0,
-        length: productData?.length || 0,
-        width: productData?.width || 0,
-      };
-    });
+    const orderItems = buildOrderItems(cartItems);
 
     try {
       const response = await apiClient.post(
@@ -377,50 +337,9 @@ export default function CheckoutContent() {
     setIsProcessing(true);
 
     try {
-      const orderItems = cartItems.map((item) => {
-        const isCartItem = !!item.product;
-        const productData = isCartItem ? item.product : item;
-        const quantity = item?.quantity || 1;
+    
+      const orderItems = buildOrderItems(cartItems);
 
-        let finalPrice = productData?.price || 0;
-        const originalPrice = productData?.price || 0;
-
-        const discount = productData?.discount || 0;
-        const isFlash = productData?.isFlash && productData?.flash;
-        const flashId = isFlash ? productData.flash._id : null;
-
-        if (isFlash) {
-          const flash = productData.flash;
-          if (flash.discountType === "PERCENT") {
-            finalPrice = finalPrice - (finalPrice * flash.discountValue) / 100;
-          } else if (flash.discountType === "FIXED") {
-            finalPrice = finalPrice - flash.discountValue;
-          }
-        } else if (discount > 0) {
-          finalPrice = finalPrice - (finalPrice * discount) / 100;
-        }
-
-        finalPrice = Math.max(finalPrice, 0);
-        finalPrice = Math.round(finalPrice);
-
-        return {
-          name: productData?.name || "Product",
-          qty: quantity,
-          image: productData?.images?.[0] || "/icons/honey-jar.png",
-          price: originalPrice,
-          finalPrice: finalPrice,
-          product: productData?._id,
-          flashId: flashId,
-          isCombo: productData?.isCombo || false,
-          itemWeight: parseFloat(productData?.weight || 0),
-          weight: parseFloat(
-            productData?.packageWeight || productData?.weight || 0,
-          ),
-          height: productData?.height || 0,
-          length: productData?.length || 0,
-          width: productData?.width || 0,
-        };
-      });
 
       const shippingAddress = {
         area: formData.area || "",

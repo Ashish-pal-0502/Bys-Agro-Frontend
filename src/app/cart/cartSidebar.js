@@ -453,7 +453,7 @@ export default function CartSidebar({ isOpen, onClose }) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed lg:rounded-tl-4xl lg:rounded-bl-4xl right-0 top-0 h-full w-full sm:w-lg md:w-sm bg-[#FAFAF6] z-50 flex flex-col font-figtree shadow-2xl"
+            className="fixed lg:rounded-tl-4xl lg:rounded-bl-4xl right-0 top-0 h-full w-full sm:w-lg md:w-sm bg-[#FAFAF6] z-50 flex flex-col font-figtree shadow-2xl font-serif"
           >
             {isInitialLoad ? (
               <LoadingCart onClose={onClose} />

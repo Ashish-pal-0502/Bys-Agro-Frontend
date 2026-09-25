@@ -15,7 +15,7 @@ export default function BlogsListServer({ blogs = [], pageCount = 0, currentPage
   const remainingBlogs = blogs.slice(1);
 
   return (
-    <div className="bg-[#FAF6ED] min-h-screen">
+    <div className="bg-[#FAF6ED] min-h-screen font-serif">
       <div className="max-w-7xl mx-auto px-5 md:px-10 py-10">
         {/* Hero */}
         <div className="text-center mb-12">

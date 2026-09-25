@@ -144,7 +144,7 @@ export default function LoginSidebar({
         jwtToken: idToken,
       });
 
-      // console.log("google login response",response)
+      console.log("google login response",response)
 
       if (response?.ok) {
         toast.success(response.data.message || "Login successful");

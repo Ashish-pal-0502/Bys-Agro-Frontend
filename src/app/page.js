@@ -76,6 +76,18 @@ async function getTestimonials() {
   }
 }
 
+async function getBanner() {
+  try {
+    const res = await fetch(`${SERVER}/variation/banner/get`, REVALIDATE);
+    if (!res.ok) throw new Error("Failed to fetch banner");
+    const data = await res.json();
+    return data.banners || data.banner || [];
+  } catch (error) {
+    console.error("Error fetching banner:", error);
+    return [];
+  }
+}
+
 async function ShopByCategorySection() {
   const categories = await getCategories();
 
@@ -93,11 +105,18 @@ async function TestimonialsSection() {
 
   return <Testimonials testimonials={testimonials} />;
 }
+  const bannerImages = await getBanner();
 
-export default async function Home() {
+  
+  const slides = bannerImages.map((b) => ({
+    src: b.image || b.imageUrl || b.url,
+    alt: b.alt || b.title || "Banner image",
+  }));
+  
+  export default async function Home() {
   return (
     <>
-      <HeroBanner />
+      <HeroBanner images={slides} />
 
       <FeatureStrip />
 

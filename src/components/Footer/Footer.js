@@ -32,7 +32,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-[#3A2E24] text-[#F7F2EA]">
+    <footer className="bg-[#3A2E24] text-[#F7F2EA] font-serif">
 
       {/* =========================================
           MAIN FOOTER

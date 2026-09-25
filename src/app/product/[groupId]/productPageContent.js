@@ -104,7 +104,7 @@ const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
   }
 
   return (
-      <div className="min-h-screen w-full bg-[#faf4ea]">
+      <div className="min-h-screen w-full bg-[#faf4ea] font-serif">
       <div className="flex flex-col lg:flex-row lg:items-start lg:justify-center lg:gap-16 lg:max-w-6xl lg:mx-auto">
         <div className="lg:w-1/2 lg:max-w-lg lg:self-stretch">
           <div className="sticky top-32">

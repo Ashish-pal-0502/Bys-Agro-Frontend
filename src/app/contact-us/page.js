@@ -40,7 +40,7 @@ function ContactPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#faf4ea]">
+    <div className="min-h-screen bg-[#faf4ea] font-serif">
       
       {/* =========================================
           HERO SECTION

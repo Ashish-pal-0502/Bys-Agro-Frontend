@@ -96,7 +96,7 @@ function CustomerReview({
 
       {reviews.length === 0 ? (
         /* Empty State */
-        <div className="relative overflow-hidden text-center py-16 px-6 rounded-3xl bg-linear-to-br from-[#f5f0e1] via-[#faf6e9] to-[#f5f0e1] border border-[#e8e2d0]">
+        <div className="relative overflow-hidden text-center py-8 px-6 rounded-3xl bg-linear-to-br from-[#f5f0e1] via-[#faf6e9] to-[#f5f0e1] border border-[#e8e2d0]">
           <div className="absolute top-0 right-0 w-40 h-40 bg-[#2d5016]/5 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-40 h-40 bg-[#c9a227]/5 rounded-full blur-3xl" />
 
@@ -127,7 +127,7 @@ function CustomerReview({
         </div>
       ) : (
         /* Rating Summary */
-        <div className="flex flex-col lg:flex-row lg:items-center gap-6 mb-10 p-6 md:p-8 rounded-3xl bg-linear-to-br from-[#f5f0e1] to-[#faf6e9] border border-[#e8e2d0]">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-6 mb-10 p-3  rounded-3xl bg-linear-to-br from-[#f5f0e1] to-[#faf6e9] border border-[#e8e2d0]">
           <div className="flex items-center gap-5">
             <div className="flex flex-col items-center justify-center w-24 h-24 rounded-2xl bg-white shadow-sm border border-[#e8e2d0]">
               <span className="text-3xl font-bold text-[#2d5016]">
@@ -139,20 +139,6 @@ function CustomerReview({
             </div>
 
             <div>
-              {/* <div className="flex gap-1 mb-2">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Image
-                    key={i}
-                    src="/icons/rating-star.png"
-                    alt="star"
-                    width={20}
-                    height={20}
-                    className={
-                      i < Math.floor(displayRating) ? "" : "opacity-30"
-                    }
-                  />
-                ))}
-              </div> */}
 
                 <div className="flex items-center gap-0.5 mb-2">
     {Array.from({ length: 5 }).map((_, i) => {

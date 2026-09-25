@@ -9,6 +9,7 @@ import CartSidebar from "./../../app/cart/cartSidebar";
 import LoginSidebar from "./../Auth/LoginSidebar";
 import VerificationSidebar from "./../Auth/VerificationSidebar";
 import toast from "react-hot-toast";
+import apiClient from './../../api/client';
 
 const ClientOnly = ({ children }) => {
   const [user, setUser] = useState();
@@ -20,17 +21,59 @@ const ClientOnly = ({ children }) => {
   const [isEmailMode, setIsEmailMode] = useState(false);
   const [confirmationResult, setConfirmationResult] = useState(null);
 
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     try {
+  //       setUser(jwtDecode(token));
+  //     } catch (error) {
+  //       console.error("Error decoding token:", error);
+  //       localStorage.removeItem("token");
+  //     }
+  //   }
+  // }, []);
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        setUser(jwtDecode(token));
-      } catch (error) {
-        console.error("Error decoding token:", error);
-        localStorage.removeItem("token");
+  if (typeof window === "undefined") return;
+
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  const restoreSession = async () => {
+    try {
+      const decoded = jwtDecode(token);
+      const now = Date.now() / 1000;
+
+      // Token still valid → set user + refresh middleware cookie
+      if (!decoded.exp || decoded.exp > now) {
+        setUser(decoded);
+        document.cookie = `token=${token}; path=/; max-age=900; SameSite=Lax`;
+        return;
       }
+
+      // Token expired → try to refresh using the refresh-token cookie
+      const res = await apiClient.post("/user/refresh-tokens");
+      if (res.ok && res.data?.accessToken) {
+        const newToken = res.data.accessToken;
+        localStorage.setItem("token", newToken);
+        document.cookie = `token=${newToken}; path=/; max-age=900; SameSite=Lax`;
+        setUser(jwtDecode(newToken));
+      } else {
+        // Refresh failed → clean up, let user log in again
+        localStorage.removeItem("token");
+        document.cookie =
+          "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
+        setUser(null);
+      }
+    } catch (err) {
+      console.error("Session restore failed:", err);
+      localStorage.removeItem("token");
+      setUser(null);
     }
-  }, []);
+  };
+
+  restoreSession();
+}, []);
 
   // Function to open cart from Navbar
   const handleCartOpen = () => {

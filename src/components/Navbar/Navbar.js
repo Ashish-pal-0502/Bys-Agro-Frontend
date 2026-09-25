@@ -104,12 +104,9 @@ const dropdownRef = useRef(null);
   }
 };
 
-const handleLogout = () => {
-  logOut();
+const handleLogout = async () => {
+ await logOut();
   toast.success("Logged out successfully");
-  setTimeout(() => {
-    navigate("/");
-  }, 1000);
 };
 
   return (
@@ -139,7 +136,7 @@ const handleLogout = () => {
               onClick={() => router.push("/")}
               className="text-3xl cursor-pointer font-serif font-bold text-[#4b2e1e] tracking-tight"
             >
-              Anaaj
+            Bys Agro
             </h1>
           </div>
 

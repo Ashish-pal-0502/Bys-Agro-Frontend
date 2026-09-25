@@ -140,11 +140,11 @@ export default function LoginSidebar({
 
     try {
       const response = await apiClient.post(`/user/register-user-google`, {
-        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+        // client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
         jwtToken: idToken,
       });
 
-      console.log("google login response",response)
+      // console.log("google login response",response)
 
       if (response?.ok) {
         toast.success(response.data.message || "Login successful");

@@ -82,7 +82,7 @@ export default function CheckoutSuccess() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#faf4ea] font-figtree flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#faf4ea] font-serif flex items-center justify-center p-4">
         <div className="text-center">
           <FaSpinner className="w-12 h-12 text-[#c1552c] animate-spin mx-auto mb-4" />
           <p className="text-[#2b1b12]">Loading order details...</p>
@@ -93,7 +93,7 @@ export default function CheckoutSuccess() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#faf4ea] font-figtree flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#faf4ea] font-serif flex items-center justify-center p-4">
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-[#e6ded2] p-8 md:p-12 max-w-md w-full text-center">
           <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <FaTimesCircle className="w-12 h-12 text-red-500" />
@@ -114,7 +114,7 @@ export default function CheckoutSuccess() {
   }
 
   return (
-    <div className="min-h-screen bg-[#faf4ea] font-figtree flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#faf4ea] font-serif flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}

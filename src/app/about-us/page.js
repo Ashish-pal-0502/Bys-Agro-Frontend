@@ -19,6 +19,9 @@ import {
 export const metadata = {
   title: "About Us – BYS Agro | Premium Quality Pulses, Spices & Oils",
   description: "Learn about BYS Agro – bringing farm-fresh pulses, cold-pressed oils, authentic spices, and dry fruits directly from Indian farms to your kitchen.",
+    alternates: {
+    canonical: "/about-us",
+  },
 };
 
 function AboutPage() {

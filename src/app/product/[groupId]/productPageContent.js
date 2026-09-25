@@ -1,14 +1,16 @@
+
+
 "use client";
 
 import { useState, useEffect } from "react";
 import ProductImageViewer from "./../../../components/Product/ProductImageViewer";
 import ProductDetails from "./../../../components/Product/ProductDetails";
 import YouMightAlsoLike from "../../../components/YouMightAlsoLike/YouMightAlsoLike";
-import ReviewModal from './../../../components/Models/ReviewModal';
-import CustomerReview from './../../../components/Product/CustomerReview';
-import useAuth from './../../../auth/useAuth';
+import ReviewModal from "./../../../components/Models/ReviewModal";
+import CustomerReview from "./../../../components/Product/CustomerReview";
+import useAuth from "./../../../auth/useAuth";
 import toast from "react-hot-toast";
-import apiClient from './../../../api/client';
+import apiClient from "./../../../api/client";
 
 const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
   const [currentProduct, setCurrentProduct] = useState(null);
@@ -19,17 +21,13 @@ const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
   const [reviewRefreshKey, setReviewRefreshKey] = useState(0);
   const { user } = useAuth();
 
-   useEffect(() => {
+  useEffect(() => {
     if (products?.length > 0 && !isInitialized) {
       let initialProduct = products[0];
 
       if (initialVisualId) {
-        const foundProduct = products.find(
-          (p) => p.visualId === initialVisualId,
-        );
-        if (foundProduct) {
-          initialProduct = foundProduct;
-        }
+        const foundProduct = products.find((p) => p.visualId === initialVisualId);
+        if (foundProduct) initialProduct = foundProduct;
       }
 
       setCurrentProduct(initialProduct);
@@ -43,33 +41,31 @@ const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
     }
   }, [excludeProductId, currentProduct?.category?._id]);
 
-    const getProductsYouMayAlsoLike = async () => {
-    const response = await apiClient.post("/product/get-related-by-category", {
-      category: currentProduct?.category?._id,
-      excludeProductId: excludeProductId,
-    });
-
-    setYouMayAlsoLikeProducts(response.data.products);
+  const getProductsYouMayAlsoLike = async () => {
+    try {
+      const response = await apiClient.post("/product/get-related-by-category", {
+        category: currentProduct?.category?._id,
+        excludeProductId,
+      });
+      setYouMayAlsoLikeProducts(response.data.products);
+    } catch (err) {
+      console.error("Failed to load related products:", err);
+    }
   };
 
   const handleVariantChange = (selectedProduct) => {
     setCurrentProduct(selectedProduct);
     setExcludeProductId(selectedProduct._id);
-
   };
 
-    const handleCreateReview = async (formData) => {
+  const handleCreateReview = async (formData) => {
     try {
       if (!user) {
         toast.error("Please login to write a review");
         return;
       }
 
-
-      const response = await apiClient.post(
-        "/product/create-product-review",
-        formData,
-      );
+      const response = await apiClient.post("/product/create-product-review", formData);
 
       if (response.ok) {
         toast.success(response.data.message || "Review added successfully");
@@ -94,59 +90,61 @@ const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
 
   if (!currentProduct) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center bg-[#faf4ea]">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-gray-500">Loading product...</p>
+          <div className="w-12 h-12 border-4 border-[#B85C38] border-t-transparent rounded-full animate-spin" />
+          <p className="text-[#655849] font-serif tracking-wide">Loading product…</p>
         </div>
       </div>
     );
   }
 
   return (
-      <div className="min-h-screen w-full bg-[#faf4ea] font-serif">
-      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-center lg:gap-16 lg:max-w-6xl lg:mx-auto">
-        <div className="lg:w-1/2 lg:max-w-lg lg:self-stretch">
-          <div className="sticky top-32">
+    <div className="min-h-screen w-full bg-[#faf4ea] font-serif">
+      {/* ─── Main Product Section ─── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-6 ">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:gap-12 xl:gap-16">
+          {/* Gallery */}
+          <div className="lg:w-1/2 lg:sticky lg:top-28">
             <ProductImageViewer
               product={currentProduct}
               discount={currentProduct.discount}
             />
           </div>
-        </div>
 
-        <div className="lg:w-1/2 lg:max-w-lg">
-          <ProductDetails
-            products={products}
-            groupId={groupId}
-             initialVisualId={initialVisualId} 
-            onVariantChange={handleVariantChange}
-            currentProduct={currentProduct}
-          />
+          {/* Details */}
+          <div className="lg:w-1/2 mt-6 lg:mt-0">
+            <ProductDetails
+              products={products}
+              groupId={groupId}
+              initialVisualId={initialVisualId}
+              onVariantChange={handleVariantChange}
+              currentProduct={currentProduct}
+            />
+          </div>
         </div>
       </div>
 
 
-         {youMayAlsoLikeProducts.length > 0 && (
-        <div className=" md:mt-8">
+      {/* ─── You May Also Like ─── */}
+      {youMayAlsoLikeProducts.length > 0 && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 mt-5 ">
           <YouMightAlsoLike youMayAlsoLikeProducts={youMayAlsoLikeProducts} />
         </div>
       )}
 
-
-      
-      {/*  Customer Reviews Section */}
-      <div id="customer-reviews-section" className="w-full lg:max-w-7xl mx-auto">
+      {/* ─── Customer Reviews ─── */}
+      <div id="customer-reviews-section" className="w-full max-w-7xl mx-auto px-4 sm:px-6 ">
         <CustomerReview
           productId={currentProduct?._id}
           groupId={currentProduct?.groupId || groupId}
           handleCreateReview={openReviewModal}
           currentProduct={currentProduct}
-            refreshKey={reviewRefreshKey}
+          refreshKey={reviewRefreshKey}
         />
       </div>
 
-      {/* Review Modal */}
+      {/* ─── Review Modal ─── */}
       <ReviewModal
         isOpen={isReviewModalOpen}
         onClose={() => setIsReviewModalOpen(false)}

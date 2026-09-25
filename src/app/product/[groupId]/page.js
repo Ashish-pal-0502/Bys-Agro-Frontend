@@ -70,6 +70,9 @@ export async function generateMetadata({ params }) {
           product.description?.substring(0, 160) || `Buy ${product.name}`,
         images: [imageUrl],
       },
+       alternates: {
+      canonical: `/product/${groupId}`,
+    },
     };
   } catch {
     return {

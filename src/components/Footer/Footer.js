@@ -52,7 +52,7 @@ const Footer = () => {
               href="/"
               className="inline-block font-serif text-4xl md:text-5xl font-bold tracking-tight text-[#F7F2EA]"
             >
-              Anaaj
+              Bys Agro
             </Link>
 
             <p className="mt-5 max-w-sm text-sm md:text-[15px] leading-7 text-[#D8CBBE]">

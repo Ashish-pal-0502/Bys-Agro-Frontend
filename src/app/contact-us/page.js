@@ -13,6 +13,9 @@ import {
 export const metadata = {
   title: "Contact Us – BYS Agro | Get in Touch",
   description: "Have questions about our products? Contact BYS Agro for inquiries about pulses, oils, spices, and dry fruits. We're here to help!",
+   alternates: {
+    canonical: "/contact-us",
+  },
 };
 
 function ContactPage() {

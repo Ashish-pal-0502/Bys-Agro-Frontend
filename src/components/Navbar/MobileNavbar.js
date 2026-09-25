@@ -143,7 +143,7 @@ export default function MobileNavbar({
             onClick={() => handleNavigation("/")}
             className="font-serif text-2xl font-bold text-[#4b2e1e]"
           >
-            Anaaj
+           Bys Agro
           </button>
 
           <button

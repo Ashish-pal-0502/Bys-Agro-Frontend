@@ -2,7 +2,10 @@ export const metadata = {
   title: "Search Products | Bys Agro",
   description:
     "Find honey, oils, spices, and more from our exclusive organic collection. Search our premium products.",
-  robots: "noindex, follow",
+robots: {
+  index: false,
+  follow: true,
+},
   openGraph: {
     title: "Search Products | Bys Agro",
     description:

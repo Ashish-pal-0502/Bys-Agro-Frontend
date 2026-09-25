@@ -9,7 +9,7 @@ export function computeUnitFinalPrice(product) {
   if (isFlash) {
     const f = product.flash;
     if (f.discountType === "PERCENT") price -= (base * Number(f.discountValue)) / 100;
-    else if (f.discountType === "FIXED") price -= Number(f.discountValue);
+    else if (f.discountType === "FLAT") price -= Number(f.discountValue);
   } else if (discount > 0) {
     price -= (base * discount) / 100;
   }

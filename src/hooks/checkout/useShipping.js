@@ -55,7 +55,7 @@ export function useShipping({
         const flash = productData.flash;
         if (flash.discountType === "PERCENT") {
           finalPrice = finalPrice - (finalPrice * flash.discountValue) / 100;
-        } else if (flash.discountType === "FIXED") {
+        } else if (flash.discountType === "FLAT") {
           finalPrice = finalPrice - flash.discountValue;
         }
       } else if (discount > 0) {

@@ -77,7 +77,7 @@ export function EmptyCart({ onClose, onStartShopping }) {
           transition={{ delay: 0.1 }}
           className="text-gray-500 mb-8"
         >
-          Looks like you haven't added anything yet
+          Looks like you haven&apos;t added anything yet
         </motion.p>
 
         <motion.button
@@ -179,6 +179,7 @@ export function CartItemRow({
               src={item?.product?.images?.[0] || "/icons/honey-jar.png"}
               alt={item?.product?.name || "Product"}
               fill
+              sizes="80px"
               className="object-cover rounded-xl"
             />
           </div>

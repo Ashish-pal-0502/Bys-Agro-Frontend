@@ -58,12 +58,12 @@ function ContactPage() {
             </div>
             
             <h1 className="font-serif text-4xl sm:text-5xl font-bold text-[#2b1b12]">
-              We'd Love to <span className="text-[#c1552c] italic">Hear</span> From You
+              We&apos;d Love to <span className="text-[#c1552c] italic">Hear</span> From You
             </h1>
             
             <p className="mt-4 text-[#5a4a3a] text-base sm:text-lg leading-relaxed">
               Have questions about our products, orders, or partnerships? 
-              Reach out to us — we're here to help!
+              Reach out to us — we&apos;re here to help!
             </p>
           </div>
         </div>
@@ -115,10 +115,10 @@ function ContactPage() {
                 </span>
               </div>
               <h2 className="font-serif text-3xl font-bold text-[#2b1b12]">
-                Let's Start a <span className="text-[#c1552c] italic">Conversation</span>
+                Let&apos;s Start a <span className="text-[#c1552c] italic">Conversation</span>
               </h2>
               <p className="mt-2 text-[#5a4a3a]">
-                Fill in the form below and we'll get back to you within 24 hours.
+                Fill in the form below and we&apos;ll get back to you within 24 hours.
               </p>
 
               <form className="mt-8 space-y-5">
@@ -189,7 +189,7 @@ function ContactPage() {
                 Visit Our <span className="text-[#c1552c] italic">Location</span>
               </h2>
               <p className="mt-2 text-[#5a4a3a]">
-                We'd love to meet you at our office. Come say hi!
+                We&apos;d love to meet you at our office. Come say hi!
               </p>
 
               <div className="mt-6 bg-[#faf4ea] rounded-2xl overflow-hidden border border-[#e6ded2] h-80 relative">

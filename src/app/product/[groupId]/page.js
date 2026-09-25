@@ -87,6 +87,9 @@ export default async function ProductPage({ params, searchParams }) {
   const { groupId } = await params;
     const { visualId } = await searchParams;
 
+  let productsWithDiscount;
+  let productSchema;
+
   try {
     const data = await fetchProductByGroupId(groupId);
     const products = data.products;
@@ -97,7 +100,7 @@ export default async function ProductPage({ params, searchParams }) {
       ? rawImg
       : `${process.env.NEXT_PUBLIC_CLIENT}${rawImg}`;
 
-    const productsWithDiscount = products.map((product) => {
+    productsWithDiscount = products.map((product) => {
       const originalPrice = product.price;
       const discountedPrice =
         product.discount > 0
@@ -114,7 +117,7 @@ export default async function ProductPage({ params, searchParams }) {
     const discountedPrice = productsWithDiscount[0].discountedPrice;
     const cleanDescription = product.description?.substring(0, 160);
 
-    const productSchema = {
+    productSchema = {
       "@context": "https://schema.org/",
       "@type": "Product",
       name: product.name,
@@ -140,31 +143,34 @@ export default async function ProductPage({ params, searchParams }) {
       },
       sku: product._id || product.visualId,
     };
-
-    return (
-      <>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
-        />
-        <div className="min-h-screen">
-          <ProductPageContent
-            products={productsWithDiscount}
-            groupId={groupId}
-            initialVisualId={visualId}
-          />
-        </div>
-      </>
-    );
   } catch (error) {
     console.error("Error fetching product:", error);
     return (
       <div className="min-h-screen flex items-center font-figtree justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
-          <p>The product you're looking for doesn't exist.</p>
+          <p>The product you&apos;re looking for doesn&apos;t exist.</p>
         </div>
       </div>
     );
   }
+
+  return (
+    <>
+      {/* \u003c-escaping stops a product name containing </script> from ending the tag early */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productSchema).replace(/</g, "\\u003c"),
+        }}
+      />
+      <div className="min-h-screen">
+        <ProductPageContent
+          products={productsWithDiscount}
+          groupId={groupId}
+          initialVisualId={visualId}
+        />
+      </div>
+    </>
+  );
 }

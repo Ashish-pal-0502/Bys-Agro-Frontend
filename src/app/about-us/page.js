@@ -80,7 +80,7 @@ function AboutPage() {
             {/* Main Heading */}
             <h1 className="font-serif text-4xl sm:text-5xl  font-bold text-[#2b1b12] leading-tight max-w-4xl">
               <span className="relative">
-                <span className="relative z-10">We're on a mission</span>
+                <span className="relative z-10">We&apos;re on a mission</span>
                 <span className="absolute -bottom-2 left-0 right-0 h-4 bg-[#c1552c]/20 rounded-full blur-sm"></span>
               </span>
               <br />
@@ -211,6 +211,7 @@ function AboutPage() {
                   src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&h=600&fit=crop"
                   alt="Fresh Indian pulses and grains"
                   fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                 />
               </div>
@@ -218,7 +219,7 @@ function AboutPage() {
               <div className="absolute -bottom-6 -right-6 bg-[#2b1b12] rounded-2xl p-5 max-w-xs shadow-2xl">
                 <Quote size={20} className="text-[#c1552c] mb-2" />
                 <p className="text-white text-sm leading-relaxed">
-                  "Quality isn't just a word to us — it's the only thing that matters."
+                  &quot;Quality isn&apos;t just a word to us — it&apos;s the only thing that matters.&quot;
                 </p>
               </div>
             </div>

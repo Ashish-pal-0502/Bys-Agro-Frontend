@@ -24,11 +24,6 @@ const LinkedOffers = ({ parentProductId, parentProduct }) => {
   const { addToCart, getTotalQuantity } = useCartStore();
   const { user } = useAuth();
 
-  useEffect(() => {
-    if (parentProductId) {
-      fetchLinkedOffers();
-    }
-  }, [parentProductId]);
 
   /* ─── Fetch ─── */
   const fetchLinkedOffers = async () => {
@@ -48,6 +43,12 @@ const LinkedOffers = ({ parentProductId, parentProduct }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (parentProductId) {
+      fetchLinkedOffers();
+    }
+  }, [parentProductId]);
 
   /* ─── Price math (LOGIC FROM FILE 1) ─── */
   // Uses product.price as the base, supports percentage / flat / fixed

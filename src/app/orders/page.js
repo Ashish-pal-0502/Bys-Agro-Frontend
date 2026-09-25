@@ -190,7 +190,7 @@ export default function OrdersPage() {
               No orders yet
             </h3>
             <p className="text-[#655849] mb-6">
-              You haven't placed any orders yet
+              You haven&apos;t placed any orders yet
             </p>
             <button
               onClick={() => router.replace("/all-products")}

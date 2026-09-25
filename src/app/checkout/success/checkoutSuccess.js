@@ -58,7 +58,6 @@ export default function CheckoutSuccess() {
       try {
         if (user?.id) {
          const res =  await apiClient.delete("/cart/clear", { userId: user.id });
-         console.log(" response fetch order", res)
         }
       } catch (err) {
         console.error("Failed to clear cart on server:", err);

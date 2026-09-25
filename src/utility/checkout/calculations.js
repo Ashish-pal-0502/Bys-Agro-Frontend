@@ -12,7 +12,7 @@ export function calculateItemsFinalPrice(cartItems) {
         const flash = item.product.flash;
         if (flash.discountType === "PERCENT") {
           itemFinalPrice = originalPrice - (originalPrice * flash.discountValue) / 100;
-        } else if (flash.discountType === "FIXED") {
+        } else if (flash.discountType === "FLAT") {
           itemFinalPrice = originalPrice - flash.discountValue;
         }
       } else if (discount > 0) {

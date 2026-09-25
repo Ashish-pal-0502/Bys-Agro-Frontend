@@ -4,6 +4,7 @@ import { useContext } from "react";
 import AuthContext from "./context";
 import { jwtDecode } from "jwt-decode";
 import apiClient from "./../api/client";
+import { setAuthCookie, clearAuthCookie } from "./authCookie";
 
 const useAuth = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -16,15 +17,12 @@ const useAuth = () => {
     localStorage.setItem("token", accessToken);
 
     // Also set a cookie (for Next.js middleware to read)
-    if (typeof document !== "undefined") {
-      document.cookie = `token=${accessToken}; path=/; max-age=900; SameSite=Lax`;
-    }
+    setAuthCookie(accessToken);
   };
 
   const logOut = async () => {
     try {
-     const res =  await apiClient.post("/user/logout");
-     console.log("res of llout", res)
+      await apiClient.post("/user/logout");
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
@@ -32,10 +30,7 @@ const useAuth = () => {
       localStorage.removeItem("token");
 
       // Clear the middleware cookie
-      if (typeof document !== "undefined") {
-        document.cookie =
-          "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
-      }
+      clearAuthCookie();
 
       if (typeof window !== "undefined") {
         window.location.href = "/";

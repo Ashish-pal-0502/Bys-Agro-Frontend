@@ -132,7 +132,7 @@ const ProductCard = ({ product }) => {
             query: { visualId: product.visualId },
           }}
           onClick={() => sessionStorage.setItem("productId", product._id)}
-          className="w-full h-full block cursor-pointer"
+          className="relative w-full h-full block cursor-pointer"
         >
           <Image
             src={productImage}

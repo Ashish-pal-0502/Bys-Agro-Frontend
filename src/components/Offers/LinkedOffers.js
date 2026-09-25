@@ -17,11 +17,6 @@ const LinkedOffers = ({ parentProductId, parentProduct }) => {
   const { addToCart, getTotalQuantity } = useCartStore();
   const { user } = useAuth();
 
-  useEffect(() => {
-    if (parentProductId) {
-      fetchLinkedOffers();
-    }
-  }, [parentProductId]);
 
   const fetchLinkedOffers = async () => {
     try {
@@ -42,6 +37,12 @@ const LinkedOffers = ({ parentProductId, parentProduct }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (parentProductId) {
+      fetchLinkedOffers();
+    }
+  }, [parentProductId]);
 
   const calculateDiscountedPrice = (product, offer) => {
     const originalPrice = product.price;
@@ -240,6 +241,7 @@ const LinkedOffers = ({ parentProductId, parentProduct }) => {
                       src={productImage}
                       alt={offer.linkedProduct.name}
                       fill
+                      sizes="110px"
                       className="object-contain"
                     />
                   </div>

@@ -33,7 +33,7 @@ export default function WhyChooseUs() {
         {/* Header */}
         <div className="max-w-2xl mb-5">
           <p className="text-[#c1552c] text-xs font-semibold uppercase tracking-[0.2em] mb-2 md:mb-4">
-            Why Anaaj
+            Why Bys Agro
           </p>
 
                   <h2 className="font-serif text-2xl md:text-3xl font-semibold text-[#1D241D]">

@@ -127,9 +127,6 @@ export default function CheckoutContent() {
     getUser();
   }, [user]);
 
-  useEffect(() => {
-    getShippingCharges();
-  }, [user, formData?.zipCode, cartItems, paymentMethod]);
 
   useEffect(() => {
     const cartTotal = backendTotals.grandTotal;
@@ -221,6 +218,10 @@ export default function CheckoutContent() {
     }
   };
 
+  useEffect(() => {
+    getShippingCharges();
+  }, [user, formData?.zipCode, cartItems, paymentMethod]);
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -302,7 +303,6 @@ export default function CheckoutContent() {
 
           toast.success("City & State auto-filled!");
         } else {
-          console.log("No pincode data found");
         }
       }
     } catch (error) {
@@ -371,11 +371,9 @@ export default function CheckoutContent() {
         codHandlingCharge: codHandlingCharge,
       };
 
-      console.log("order pyaload", orderData);
 
       const response = await apiClient.post("/order/create-order", orderData);
 
-      console.log(" order response", response);
 
 
       if (response.ok) {
@@ -395,12 +393,16 @@ export default function CheckoutContent() {
           return;
         }
 
-        const result = await createRazorpayOrder(finalTotal);
+        const result = await createRazorpayOrder(
+          response.data.orders.map((order) => order._id),
+        );
+        if (!result) return; // the order stays pending and is cancelled automatically
+
         const options = {
           key: result?.data?.notes?.key,
-          amount: finalTotal,
+          amount: result?.data?.amount,
           currency: "INR",
-          name: "Bys Agro.",
+          name: "Bys Agro",
           description: "Order Transaction",
           image: "https://bysagro.com/LogoR.webp",
           order_id: result?.data?.id,
@@ -443,12 +445,6 @@ export default function CheckoutContent() {
 
   const verifyOrder = async (orderIds, razorpayPayload) => {
     const idsArray = Array.isArray(orderIds) ? orderIds : [orderIds];
-      console.log(" verifyOrder pyaload", {
-      orderIds: idsArray,
-      razorpay_order_id: razorpayPayload.razorpay_order_id,
-      razorpay_payment_id: razorpayPayload.razorpay_payment_id,
-      razorpay_signature: razorpayPayload.razorpay_signature,
-    });
 
     const response = await apiClient.post("/order/verify-order", {
       orderIds: idsArray,
@@ -457,7 +453,6 @@ export default function CheckoutContent() {
       razorpay_signature: razorpayPayload.razorpay_signature,
     });
 
-          console.log(" verifyOrder response", response);
 
 
     const serverStatus = response?.data?.paymentStatus;
@@ -479,11 +474,11 @@ export default function CheckoutContent() {
     }
   };
 
-  const createRazorpayOrder = async (finalTotal) => {
+  // The server prices the payment from the saved orders; the browser sends no amount.
+  const createRazorpayOrder = async (orderIds) => {
     try {
       const response = await apiClient.get("/order/payment", {
-        userId: user?.id,
-        total: Math.round(finalTotal),
+        orderIds: orderIds.join(","),
       });
 
       if (response?.ok) {
@@ -523,8 +518,8 @@ export default function CheckoutContent() {
               delay: i * 0.3,
             }}
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${(i * 37 + 13) % 100}%`,
+              top: `${(i * 53 + 29) % 100}%`,
             }}
           />
         ))}

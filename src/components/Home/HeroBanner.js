@@ -98,6 +98,7 @@ const HeroBanner = ({ images = [] }) => {
                         src={image.src}
                         alt={image.alt || "Banner image"}
                         fill
+                        sizes="100vw"
                         className="object-cover"
                         priority={index === 0}
                       />

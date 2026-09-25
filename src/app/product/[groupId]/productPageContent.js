@@ -35,11 +35,6 @@ const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
     }
   }, [products, initialVisualId, isInitialized]);
 
-  useEffect(() => {
-    if (excludeProductId && currentProduct?.category?._id) {
-      getProductsYouMayAlsoLike();
-    }
-  }, [excludeProductId, currentProduct?.category?._id]);
 
   const getProductsYouMayAlsoLike = async () => {
     try {
@@ -52,6 +47,12 @@ const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
       console.error("Failed to load related products:", err);
     }
   };
+
+  useEffect(() => {
+    if (excludeProductId && currentProduct?.category?._id) {
+      getProductsYouMayAlsoLike();
+    }
+  }, [excludeProductId, currentProduct?.category?._id]);
 
   const handleVariantChange = (selectedProduct) => {
     setCurrentProduct(selectedProduct);

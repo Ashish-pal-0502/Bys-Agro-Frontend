@@ -8,6 +8,11 @@ import ResponsiveBanner from "./../components/Home/ResponsiveBanner";
 import WhyChooseUs from "./../components/Home/WhyChooseUs";
 import Testimonials from "./../components/Home/Testimonials";
 
+// Title/description come from the root layout; this only pins the homepage canonical.
+export const metadata = {
+  alternates: { canonical: "/" },
+};
+
 const SERVER = process.env.NEXT_PUBLIC_SERVER;
 
 const REVALIDATE = {

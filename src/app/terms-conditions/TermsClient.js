@@ -182,8 +182,8 @@ function TermsPage() {
               By Shopping With Us, You Accept These Terms
             </h3>
             <p className="text-gray-300 text-sm mt-2 max-w-lg mx-auto">
-              We're committed to providing you with the best quality products 
-              and service. If you have any questions, don't hesitate to reach out.
+              We&apos;re committed to providing you with the best quality products 
+              and service. If you have any questions, don&apos;t hesitate to reach out.
             </p>
             <button
               onClick={() => router.push('/contact-us')}

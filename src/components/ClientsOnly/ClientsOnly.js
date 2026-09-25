@@ -10,6 +10,7 @@ import LoginSidebar from "./../Auth/LoginSidebar";
 import VerificationSidebar from "./../Auth/VerificationSidebar";
 import toast from "react-hot-toast";
 import apiClient from './../../api/client';
+import { setAuthCookie, clearAuthCookie } from "./../../auth/authCookie";
 
 const ClientOnly = ({ children }) => {
   const [user, setUser] = useState();
@@ -47,7 +48,7 @@ const ClientOnly = ({ children }) => {
       // Token still valid → set user + refresh middleware cookie
       if (!decoded.exp || decoded.exp > now) {
         setUser(decoded);
-        document.cookie = `token=${token}; path=/; max-age=900; SameSite=Lax`;
+        setAuthCookie(token);
         return;
       }
 
@@ -56,13 +57,12 @@ const ClientOnly = ({ children }) => {
       if (res.ok && res.data?.accessToken) {
         const newToken = res.data.accessToken;
         localStorage.setItem("token", newToken);
-        document.cookie = `token=${newToken}; path=/; max-age=900; SameSite=Lax`;
+        setAuthCookie(newToken);
         setUser(jwtDecode(newToken));
       } else {
         // Refresh failed → clean up, let user log in again
         localStorage.removeItem("token");
-        document.cookie =
-          "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
+        clearAuthCookie();
         setUser(null);
       }
     } catch (err) {
@@ -93,7 +93,6 @@ const ClientOnly = ({ children }) => {
 
     // Login functions
     window.openLoginSidebar = () => {
-      console.log("Opening login sidebar");
       setIsLoginOpen(true);
     };
 
@@ -112,7 +111,6 @@ const ClientOnly = ({ children }) => {
 
     // Listen for cart update events
     const handleCartUpdate = () => {
-      console.log("Cart updated");
     };
     window.addEventListener("cartUpdated", handleCartUpdate);
 

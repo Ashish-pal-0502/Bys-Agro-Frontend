@@ -1,10 +1,9 @@
 import { create } from "apisauce";
+import { setAuthCookie, clearAuthCookie } from "./../auth/authCookie";
 
 const apiClient = create({
-  baseURL: "http://localhost:5000/api",
-  // baseURL: "http://3.109.124.131:5000/api",
+  baseURL: process.env.NEXT_PUBLIC_SERVER || "http://3.109.124.131:5000/api",
   withCredentials: true,
-  headers: { Accept: "application/vnd.github.v3+json" },
 });
 
 // ---- Helpers ----
@@ -15,18 +14,12 @@ const getAccessToken = () => {
 
 const setAccessToken = (token) => {
   localStorage.setItem("token", token);
-  //  keep the middleware cookie in sync
-  if (typeof document !== "undefined") {
-    document.cookie = `token=${token}; path=/; max-age=900; SameSite=Lax`;
-  }
+  setAuthCookie(token); // keep the middleware cookie in sync
 };
 
 const removeAccessToken = () => {
   localStorage.removeItem("token");
-  if (typeof document !== "undefined") {
-    document.cookie =
-      "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
-  }
+  clearAuthCookie();
 };
 
 // ---- Add access token to every request ----

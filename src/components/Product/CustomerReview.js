@@ -26,9 +26,6 @@ function CustomerReview({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
-    getProductReview();
-  }, [currentPage, currentProduct, refreshKey]);
 
   const getProductReview = async () => {
     try {
@@ -56,6 +53,10 @@ function CustomerReview({
       setTotalPages(1);
     }
   };
+
+  useEffect(() => {
+    getProductReview();
+  }, [currentPage, currentProduct, refreshKey]);
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;

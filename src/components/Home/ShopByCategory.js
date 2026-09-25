@@ -161,6 +161,7 @@ const ShopByCategory = ({ categories = [] }) => {
                     src={item.image}
                     alt={item.name}
                     fill
+                    sizes="(max-width: 768px) 50vw, 250px"
                     className="object-cover"
                   />
                 </div>

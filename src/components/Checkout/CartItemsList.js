@@ -63,7 +63,7 @@ export default function CartItemsList({ cartItems, isCartOpen, onToggle }) {
                     originalPrice -
                     (originalPrice * flash.discountValue) / 100;
                   finalDiscountPercent = flash.discountValue;
-                } else if (flash?.discountType === "FIXED") {
+                } else if (flash?.discountType === "FLAT") {
                   displayPrice = originalPrice - flash.discountValue;
                   finalDiscountPercent =
                     (flash.discountValue / originalPrice) * 100;
@@ -139,6 +139,7 @@ export default function CartItemsList({ cartItems, isCartOpen, onToggle }) {
                             item?.product?.name || item?.name || "Product"
                           }
                           fill
+                          sizes="80px"
                           className="object-cover rounded-xl"
                         />
                       </div>

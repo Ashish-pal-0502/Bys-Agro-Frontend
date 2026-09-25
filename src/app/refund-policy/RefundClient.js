@@ -155,7 +155,7 @@ function RefundPolicyPage() {
               <div>
                 <p className="text-[#5a4a3a] leading-relaxed">
                   At BYS Agro, we want you to be completely satisfied with your purchase. 
-                  If you're not happy with any product, we offer a hassle-free return and 
+                  If you&apos;re not happy with any product, we offer a hassle-free return and 
                   refund policy. Please review the details below.
                 </p>
               </div>
@@ -236,7 +236,7 @@ function RefundPolicyPage() {
                     Need Help with a Return?
                   </h3>
                   <p className="text-gray-300 text-sm">
-                    We're here to assist you every step of the way
+                    We&apos;re here to assist you every step of the way
                   </p>
                 </div>
               </div>

@@ -58,14 +58,6 @@ const SearchClient = ({ initialQuery = "" }) => {
     return () => clearTimeout(debounceRef.current);
   }, [searchQuery]);
 
-  useEffect(() => {
-    const q = searchParams.get("q") || "";
-    if (!q.trim()) {
-      setIsSearching(false);
-      return;
-    }
-    performSearch(q);
-  }, [searchParams]);
 
   const performSearch = async (query) => {
     try {
@@ -84,13 +76,22 @@ const SearchClient = ({ initialQuery = "" }) => {
         setError("Failed to search products");
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setError("Error searching products");
     } finally {
       setLoading(false);
       setIsSearching(false);
     }
   };
+
+  useEffect(() => {
+    const q = searchParams.get("q") || "";
+    if (!q.trim()) {
+      setIsSearching(false);
+      return;
+    }
+    performSearch(q);
+  }, [searchParams]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -191,11 +192,11 @@ const SearchClient = ({ initialQuery = "" }) => {
                   <span className="font-bold text-[#2b1b12]">
                     {searchResults.length}
                   </span>{" "}
-                  products for "
+                  products for &quot;
                   <span className="font-semibold text-[#c1552c]">
                     {searchQuery}
                   </span>
-                  "
+                  &quot;
                 </p>
                 <span className="text-xs text-[#8a8179] bg-white px-3 py-1 rounded-full border border-[#e6ded2]">
                   {searchResults.length} items
@@ -218,11 +219,11 @@ const SearchClient = ({ initialQuery = "" }) => {
                 No products found
               </h3>
               <p className="text-[#8a8179] mt-2">
-                We couldn't find any products matching "
+                We couldn&apos;t find any products matching &quot;
                 <span className="text-[#c1552c] font-medium">
                   {searchQuery}
                 </span>
-                "
+                &quot;
               </p>
               <button
                 onClick={clearSearch}

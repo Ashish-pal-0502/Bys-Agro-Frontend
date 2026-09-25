@@ -142,21 +142,6 @@ export default function ProfilePage() {
       toast.error("Please fix the errors before saving");
       return;
     }
-			console.log("paylod", {
-        userId: user?.id,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: formData.phone,
-        address: {
-          area: formData.address.area,
-          city: formData.address.city,
-          state: formData.address.state,
-          landmark: formData.address.landmark,
-          pincode: formData.address.pincode,
-          country: formData.address.country || "India",
-        },
-      })
 
 
     try {
@@ -176,7 +161,6 @@ export default function ProfilePage() {
         },
       });
 
-			console.log("res", response)
 
       if (response.ok) {
         toast.success(response.data.message || "Profile updated successfully!");

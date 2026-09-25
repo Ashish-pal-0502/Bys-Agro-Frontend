@@ -116,7 +116,7 @@ function Testimonials({ testimonials = [] }) {
             </h2>
 
             <p className="text-[#6b5b4c] mt-2 text-sm max-w-xl">
-              Real experiences from people who choose Anaaj for their everyday
+              Real experiences from people who choose Bys Agro for their everyday
               staples.
             </p>
           </div>

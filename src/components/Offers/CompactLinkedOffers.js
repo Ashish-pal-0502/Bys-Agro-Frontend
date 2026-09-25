@@ -18,11 +18,6 @@ const CompactLinkedOffers = ({
   const [loading, setLoading] = useState(true);
   const { getTotalQuantity } = useCartStore();
   const { user } = useAuth();
-  useEffect(() => {
-    if (parentProductId) {
-      fetchLinkedOffers();
-    }
-  }, [parentProductId]);
 
   const fetchLinkedOffers = async () => {
     try {
@@ -43,6 +38,12 @@ const CompactLinkedOffers = ({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (parentProductId) {
+      fetchLinkedOffers();
+    }
+  }, [parentProductId]);
 
   const getCurrentCartTotal = async () => {
     if (user) {
@@ -157,6 +158,7 @@ const CompactLinkedOffers = ({
                   src={offer.linkedProduct?.images?.[0] || "/placeholder.png"}
                   alt={offer.linkedProduct.name}
                   fill
+                  sizes="48px"
                   className="object-contain rounded-lg"
                 />
               </div>

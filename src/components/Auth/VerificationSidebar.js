@@ -276,7 +276,7 @@ export default function VerificationSidebar({
 
             {/* Resend */}
             <div className="mt-6 text-sm flex justify-center gap-2 text-[#8a8179]">
-              <span>Didn't receive the code?</span>
+              <span>Didn&apos;t receive the code?</span>
               {resendTimer > 0 ? (
                 <span className="text-[#5a4a3a] font-medium">
                   Resend in {resendTimer}s

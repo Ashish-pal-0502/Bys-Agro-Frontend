@@ -174,12 +174,64 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#faf4ea] font-serif">
-      <div className="max-w-6xl mx-auto px-4 lg:px-0 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#2b1b12]">My Orders</h1>
-          <p className="text-[#655849]">Track and manage your purchases</p>
-        </div>
+<div className="min-h-screen bg-[#faf4ea] font-serif">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="mb-8">
+      <h1 className="text-xl md:text-3xl font-bold text-[#2b1b12]">My Orders</h1>
+      <p className="text-[#655849]">Track and manage your purchases</p>
+    </div>
+
+
+          {orders.length > 0 && (
+          <div className="mt-8 bg-white rounded-2xl shadow-sm border border-[#e6ded2] p-6 mb-8">
+            <h3 className="text-xl font-bold text-[#2b1b12] mb-4">
+              Orders Summary
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center p-4 bg-green-50 rounded-xl">
+                <p className="text-3xl font-bold text-green-600">
+                  {
+                    orders.filter(
+                      (o) => getOrderStatus(o.deliveryStatus) === "Delivered",
+                    ).length
+                  }
+                </p>
+                <p className="text-[#655849]">Delivered</p>
+              </div>
+              <div className="text-center p-4 bg-blue-50 rounded-xl">
+                <p className="text-3xl font-bold text-blue-600">
+                  {
+                    orders.filter(
+                      (o) =>
+                        getOrderStatus(o.deliveryStatus) === "Out for Delivery",
+                    ).length
+                  }
+                </p>
+                <p className="text-[#655849]">In Transit</p>
+              </div>
+              <div className="text-center p-4 bg-amber-50 rounded-xl">
+                <p className="text-3xl font-bold text-amber-600">
+                  {
+                    orders.filter(
+                      (o) => getOrderStatus(o.deliveryStatus) === "Processing",
+                    ).length
+                  }
+                </p>
+                <p className="text-[#655849]">Processing</p>
+              </div>
+              <div className="text-center p-4 bg-gray-50 rounded-xl">
+                <p className="text-3xl font-bold text-gray-600">
+                  {
+                    orders.filter(
+                      (o) => getOrderStatus(o.deliveryStatus) === "Cancelled",
+                    ).length
+                  }
+                </p>
+                <p className="text-[#655849]">Cancelled</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {orders.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-[#e6ded2]">
@@ -386,56 +438,7 @@ export default function OrdersPage() {
           </div>
         )}
 
-        {orders.length > 0 && (
-          <div className="mt-8 bg-white rounded-2xl shadow-sm border border-[#e6ded2] p-6">
-            <h3 className="text-xl font-bold text-[#2b1b12] mb-4">
-              Orders Summary
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-4 bg-green-50 rounded-xl">
-                <p className="text-3xl font-bold text-green-600">
-                  {
-                    orders.filter(
-                      (o) => getOrderStatus(o.deliveryStatus) === "Delivered",
-                    ).length
-                  }
-                </p>
-                <p className="text-[#655849]">Delivered</p>
-              </div>
-              <div className="text-center p-4 bg-blue-50 rounded-xl">
-                <p className="text-3xl font-bold text-blue-600">
-                  {
-                    orders.filter(
-                      (o) =>
-                        getOrderStatus(o.deliveryStatus) === "Out for Delivery",
-                    ).length
-                  }
-                </p>
-                <p className="text-[#655849]">In Transit</p>
-              </div>
-              <div className="text-center p-4 bg-amber-50 rounded-xl">
-                <p className="text-3xl font-bold text-amber-600">
-                  {
-                    orders.filter(
-                      (o) => getOrderStatus(o.deliveryStatus) === "Processing",
-                    ).length
-                  }
-                </p>
-                <p className="text-[#655849]">Processing</p>
-              </div>
-              <div className="text-center p-4 bg-gray-50 rounded-xl">
-                <p className="text-3xl font-bold text-gray-600">
-                  {
-                    orders.filter(
-                      (o) => getOrderStatus(o.deliveryStatus) === "Cancelled",
-                    ).length
-                  }
-                </p>
-                <p className="text-[#655849]">Cancelled</p>
-              </div>
-            </div>
-          </div>
-        )}
+      
       </div>
     </div>
   );

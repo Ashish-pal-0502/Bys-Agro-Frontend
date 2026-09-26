@@ -41,7 +41,7 @@ export default function ShareButton({ title, text, progressOnly = false }) {
   return (
     <button
       onClick={handleShare}
-      className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#e6ded2] hover:bg-white hover:border-[#c1552c] hover:text-[#c1552c] transition-all duration-200"
+      className="flex items-center cursor-pointer gap-2 px-3 py-1.5 rounded-full border border-[#e6ded2] hover:bg-white hover:border-[#c1552c] hover:text-[#c1552c] transition-all duration-200"
       aria-label="Share this article"
     >
       <FaShareAlt size={12} aria-hidden="true" />

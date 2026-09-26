@@ -4,10 +4,12 @@
 
 import { X, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import apiClient from './../../api/client';
 
 export default function ShopDrawer({ isOpen, onClose }) {
+    const drawerRef = useRef(null);
+const previousFocusRef = useRef(null);
   const router = useRouter();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,6 +35,45 @@ export default function ShopDrawer({ isOpen, onClose }) {
     }
   }, [isOpen]);
 
+
+
+useEffect(() => {
+  if (!isOpen) return;
+
+  previousFocusRef.current = document.activeElement;
+  const drawer = drawerRef.current;
+  if (!drawer) return;
+
+  const focusable = drawer.querySelectorAll(
+    'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  first?.focus();
+
+  const handleKeyDown = (e) => {
+    if (e.key !== "Tab") return;
+    if (focusable.length === 0) {
+      e.preventDefault();
+      return;
+    }
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last?.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first?.focus();
+    }
+  };
+
+  document.addEventListener("keydown", handleKeyDown);
+  return () => {
+    document.removeEventListener("keydown", handleKeyDown);
+    previousFocusRef.current?.focus?.();
+  };
+}, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleCategoryClick = (categoryId) => {
@@ -56,7 +97,12 @@ export default function ShopDrawer({ isOpen, onClose }) {
       />
 
       {/* Drawer */}
-      <aside className="fixed hidden lg:block top-0 right-0 h-full w-105 max-w-[90vw] bg-[#fffdf9] z-70 lg:shadow-[-20px_0_60px_rgba(49,38,32,0.12)] animate-shopDrawer">
+      <aside 
+      ref={drawerRef}
+  role="dialog"
+  aria-modal="true"
+  aria-label="Shop by category"
+      className="fixed hidden lg:block top-0 right-0 h-full w-105 max-w-[90vw] bg-[#fffdf9] z-70 lg:shadow-[-20px_0_60px_rgba(49,38,32,0.12)] animate-shopDrawer">
         <div className="h-full flex flex-col">
           {/* Header */}
           <div className="px-7 pt-7 pb-6 border-b border-[#e9e1d7]">

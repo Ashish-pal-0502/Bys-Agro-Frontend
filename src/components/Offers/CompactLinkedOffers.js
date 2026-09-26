@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, memo  } from "react";
 import toast from "react-hot-toast";
 import { FaLock } from "react-icons/fa";
 import { GiPresent } from "react-icons/gi";

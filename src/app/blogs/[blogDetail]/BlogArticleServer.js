@@ -17,6 +17,9 @@ const getInitials = (name = "") =>
     .join("")
     .toUpperCase();
 
+    const stripHeadingTags = (html = "") =>
+  html.replace(/<\/?h[1-6][^>]*>/gi, "");
+
 export default function BlogArticleServer({ blog }) {
   const readingTime = getReadingTime(blog.content);
 
@@ -30,7 +33,7 @@ export default function BlogArticleServer({ blog }) {
         </p>
 
         <h1 className="text-3xl md:text-5xl font-serif font-bold text-center text-[#2b1b12] leading-tight mb-4">
-          {Parser().parse(blog.heading || "") || blog.heading || "Untitled"}
+         {Parser().parse(stripHeadingTags(blog.heading || "")) || "Untitled"}
         </h1>
 
         <p className="text-center text-[#5a4a3a] max-w-2xl mx-auto text-sm md:text-base mb-6 leading-relaxed">
@@ -66,7 +69,21 @@ export default function BlogArticleServer({ blog }) {
           </div>
         )}
 
-        <article className="prose prose-lg max-w-none text-[#2b1b12] prose-headings:text-[#2b1b12] prose-headings:font-serif prose-p:text-[#5a4a3a] prose-p:leading-relaxed prose-strong:text-[#2b1b12] prose-ul:text-[#5a4a3a] prose-li:text-[#5a4a3a]">
+        {/* <article className="prose prose-lg max-w-none text-[#2b1b12] prose-headings:text-[#2b1b12] prose-headings:font-serif prose-p:text-[#5a4a3a] prose-p:leading-relaxed prose-strong:text-[#2b1b12] prose-ul:text-[#5a4a3a] prose-li:text-[#5a4a3a]"> */}
+
+        <article className="prose prose-lg max-w-none
+  prose-p:my-6
+  prose-headings:mt-10 prose-headings:mb-4
+  prose-li:my-2
+  prose-ul:my-6
+  text-[#2b1b12]
+  prose-headings:text-[#2b1b12]
+  prose-headings:font-serif
+  prose-p:text-[#5a4a3a]
+  prose-p:leading-relaxed
+  prose-strong:text-[#2b1b12]
+  prose-ul:text-[#5a4a3a]
+  prose-li:text-[#5a4a3a]">
           {Parser().parse(blog.content || "<p>No content available</p>")}
         </article>
 

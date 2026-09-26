@@ -28,7 +28,6 @@ const ResponsiveBanner = ({
           width={490}
           height={mobileHeight}
           className="w-full h-auto object-cover"
-          priority
         />
         {/* Text Overlay on Mobile */}
         <div className="absolute inset-0 flex flex-col justify-start px-8 py-3 items-start bg-black/20">
@@ -55,7 +54,6 @@ const ResponsiveBanner = ({
           width={1400}
           height={desktopHeight}
           className="w-full h-auto object-cover"
-          priority
         />
         {/* Text Overlay on Desktop */}
         <div className="absolute inset-0 flex flex-col justify-start py-3 items-start px-8 bg-black/10">

@@ -139,12 +139,14 @@ export default function MobileNavbar({
 
         <div className="flex items-center justify-between px-5 py-4 border-b border-[#e9e1d7]">
 
-          <button
-            onClick={() => handleNavigation("/")}
-            className="font-serif text-2xl font-bold text-[#4b2e1e]"
-          >
-           Bys Agro
-          </button>
+       <Link
+  href="/"
+  onClick={onClose}
+  aria-label="BYS Agro – Home"
+  className="font-serif text-2xl font-bold text-[#4b2e1e]"
+>
+  Bys Agro
+</Link>
 
           <button
             onClick={onClose}

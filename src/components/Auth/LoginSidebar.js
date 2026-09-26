@@ -20,6 +20,8 @@ export default function LoginSidebar({
   setIsVerificationModalOpen,
   setConfirmationResult
 }) {
+  
+  const previousFocusRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { logIn } = useAuth();
@@ -64,6 +66,45 @@ export default function LoginSidebar({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen, onClose]);
+
+
+
+useEffect(() => {
+  if (!isOpen) return;
+
+  previousFocusRef.current = document.activeElement;
+  const sidebar = sidebarRef.current;
+  if (!sidebar) return;
+
+  const focusable = sidebar.querySelectorAll(
+    'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  first?.focus();
+
+  const handleKeyDown = (e) => {
+    if (e.key !== "Tab") return;
+    if (focusable.length === 0) {
+      e.preventDefault();
+      return;
+    }
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last?.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first?.focus();
+    }
+  };
+
+  document.addEventListener("keydown", handleKeyDown);
+  return () => {
+    document.removeEventListener("keydown", handleKeyDown);
+    previousFocusRef.current?.focus?.();
+  };
+}, [isOpen]);
 
   const handleMobileChange = (e) => {
     const value = e.target.value.replace(/\D/g, "");
@@ -197,7 +238,10 @@ const isDisabled = !isMobileValid;
 
       {/* Sidebar */}
       <div
-        ref={sidebarRef}
+      ref={sidebarRef}
+  role="dialog"
+  aria-modal="true"
+  aria-label="Login"
         className="fixed right-0 top-0 h-full w-full sm:w-110 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-out animate-slideIn"
       >
         {/* Header */}
@@ -219,15 +263,15 @@ const isDisabled = !isMobileValid;
           </button>
         </div>
 
-        {/* Body */}
+   
         <div className="p-6 overflow-y-auto h-[calc(100%-80px)]">
           <div className="max-w-sm mx-auto">
-            <p className="text-[#5a4a3a] text-sm mb-6">
+            {/* <p className="text-[#5a4a3a] text-sm mb-6">
         Enter your mobile number to receive a verification code.
-            </p>
+            </p> */}
 
-            {/* Input Field */}
-            <div className="mb-5">
+       
+            {/* <div className="mb-5">
               <label className="text-[#5a4a3a] text-sm font-medium mb-2 block">
              Mobile Number
               </label>
@@ -260,10 +304,10 @@ const isDisabled = !isMobileValid;
               </div>
 
               {error && <p className="text-red-500 text-xs mt-1.5">{error}</p>}
-            </div>
+            </div> */}
 
-            {/* Send OTP Button */}
-            <button
+          
+            {/* <button
               onClick={handleSendOtp}
               disabled={isDisabled || loading}
               className={`w-full text-white py-3.5 rounded-xl font-semibold transition-all duration-200 ${
@@ -280,16 +324,16 @@ const isDisabled = !isMobileValid;
               ) : (
                 "Send OTP"
               )}
-            </button>
+            </button> */}
 
-            {/* Divider */}
-            <div className="flex items-center my-6 text-[#a0968c]">
+         
+            {/* <div className="flex items-center my-6 text-[#a0968c]">
               <span className="flex-1 border-t border-[#e6ded2]"></span>
               <span className="px-3 text-xs font-medium">or continue with</span>
               <span className="flex-1 border-t border-[#e6ded2]"></span>
-            </div>
+            </div> */}
 
-            {/* Social Login */}
+          
             <div className="flex flex-col gap-3">
               <div className="w-full flex justify-center">
                 <GoogleLogin
@@ -305,7 +349,6 @@ const isDisabled = !isMobileValid;
            
             </div>
 
-            {/* Terms */}
             <p className="text-xs text-[#8a8179] mt-6 text-center">
               By continuing, you agree to our{" "}
               <button

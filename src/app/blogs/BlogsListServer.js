@@ -10,6 +10,9 @@ const getReadTime = (content = "") => {
   return Math.ceil(words / 200);
 };
 
+const stripHeadingTags = (html = "") =>
+  html.replace(/<\/?h[1-6][^>]*>/gi, "");
+
 export default function BlogsListServer({ blogs = [], pageCount = 0, currentPage = 1 }) {
   const featuredBlog = blogs[0];
   const remainingBlogs = blogs.slice(1);
@@ -53,7 +56,7 @@ export default function BlogsListServer({ blogs = [], pageCount = 0, currentPage
               </p>
               <Link href={`/blogs/${featuredBlog._id}`}>
                 <h2 className="text-2xl md:text-3xl font-bold text-[#2b1b12] mb-3 leading-snug hover:text-[#c1552c] transition-colors">
-                  { Parser().parse(featuredBlog.heading || "") || "Untitled"}
+             {Parser().parse(stripHeadingTags(featuredBlog.heading || "")) || "Untitled"}
                 </h2>
               </Link>
               <p className="text-[#5a4a3a] text-sm mb-4 line-clamp-3 leading-relaxed">

@@ -1,8 +1,10 @@
-
 "use client";
 import Link from "next/link";
 import { FaClock } from "react-icons/fa";
 import { Parser } from "html-to-react";
+
+const stripHeadingTags = (html = "") =>
+  html.replace(/<\/?h[1-6][^>]*>/gi, "");
 
 const BlogCard = ({ blogData }) => {
   const words = blogData?.content?.split(/\s+/).length || 0;
@@ -27,7 +29,9 @@ const BlogCard = ({ blogData }) => {
 
         <Link href={`/blogs/${blogData._id}`}>
           <h3 className="text-base cursor-pointer font-semibold text-[#2b1b12] leading-snug line-clamp-2 hover:text-[#c1552c] transition-colors">
-            {Parser().parse(blogData?.heading || "") || blogData.heading || "Untitled"}
+            {Parser().parse(stripHeadingTags(blogData?.heading || "")) ||
+              blogData.heading ||
+              "Untitled"}
           </h3>
         </Link>
 
@@ -38,10 +42,10 @@ const BlogCard = ({ blogData }) => {
         <div className="flex items-center justify-between text-xs text-[#8a8179] pt-2 border-t border-[#e6ded2]">
           <span>
             {blogData.createdAt
-              ? new Date(blogData.createdAt).toLocaleDateString('en-IN', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric'
+              ? new Date(blogData.createdAt).toLocaleDateString("en-IN", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
                 })
               : "Recently"}
           </span>

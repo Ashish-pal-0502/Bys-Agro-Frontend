@@ -5,7 +5,7 @@ import apiClient from "./../../api/client";
 import useAuth from "./../../auth/useAuth";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef ,useCallback   } from "react";
 import toast from "react-hot-toast";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { FaMoneyCheck } from "react-icons/fa6";
@@ -94,17 +94,22 @@ export default function CartSidebar({ isOpen, onClose }) {
     };
   };
 
-  const getTotalCartQuantity = () => {
-    if (!Array.isArray(cartData)) return 0;
-    return cartData.reduce((sum, item) => sum + (item?.quantity || 0), 0);
-  };
+  // const getTotalCartQuantity = () => {
+  //   if (!Array.isArray(cartData)) return 0;
+  //   return cartData.reduce((sum, item) => sum + (item?.quantity || 0), 0);
+  // };
+
+  const getTotalCartQuantity = useCallback(() => {
+  if (!Array.isArray(cartData)) return 0;
+  return cartData.reduce((sum, item) => sum + (item?.quantity || 0), 0);
+}, [cartData]);
 
   const localTotals = getLocalCartTotals();
 
   // ─────────────────────────────────────────────
   // Fetch cart — silent mode avoids showing loader on refetches
   // ─────────────────────────────────────────────
-  const getCartCount = async ({ silent = false } = {}) => {
+  const getCartCount = useCallback(async ({ silent = false } = {}) => {
     if (!user) return;
 
     try {
@@ -129,9 +134,9 @@ export default function CartSidebar({ isOpen, onClose }) {
     } finally {
       setIsInitialLoad(false);
     }
-  };
+  }, [user]);
 
-  const checkLinkedOffersForCart = async () => {
+const checkLinkedOffersForCart = useCallback(async () => {
     if (!user || cartData.length === 0) return;
 
     setIsCheckingOffers(true);
@@ -167,9 +172,9 @@ export default function CartSidebar({ isOpen, onClose }) {
     } finally {
       setIsCheckingOffers(false);
     }
-  };
+  }, [user, cartData]);
 
-  const applyLinkedDiscountsToCart = async () => {
+  const applyLinkedDiscountsToCart = useCallback(async () => {
     try {
       const response = await apiClient.post("/cart/apply-linked-discounts", {
         userId: user?.id,
@@ -186,7 +191,7 @@ export default function CartSidebar({ isOpen, onClose }) {
     } catch (error) {
       console.error("Error fetching cart totals:", error);
     }
-  };
+  }, [user]);
 
   const getDeliveryPrices = async () => {
     try {
@@ -248,31 +253,57 @@ export default function CartSidebar({ isOpen, onClose }) {
     return 0;
   };
 
-  const removeSingleItemFromCart = async (item) => {
-    if (user) {
-      const response = await apiClient.delete("/cart/remove", {
-        cartItemId: item._id,
-      });
+  // const removeSingleItemFromCart = async (item) => {
+  //   if (user) {
+  //     const response = await apiClient.delete("/cart/remove", {
+  //       cartItemId: item._id,
+  //     });
 
-      if (response.ok) {
-        window.dispatchEvent(new CustomEvent("cartUpdated"));
-        getCartCount({ silent: true });
-        applyLinkedDiscountsToCart();
-        checkLinkedOffersForCart();
-        toast.success(response.data.message || "Done!");
-      }
-    } else {
-      removeFromCart(item._id);
-      toast.success("Item removed from cart!");
+  //     if (response.ok) {
+  //       window.dispatchEvent(new CustomEvent("cartUpdated"));
+  //       getCartCount({ silent: true });
+  //       applyLinkedDiscountsToCart();
+  //       checkLinkedOffersForCart();
+  //       toast.success(response.data.message || "Done!");
+  //     }
+  //   } else {
+  //     removeFromCart(item._id);
+  //     toast.success("Item removed from cart!");
+  //     window.dispatchEvent(new CustomEvent("cartUpdated"));
+  //   }
+  // };
+
+  const removeSingleItemFromCart = useCallback(async (item) => {
+  if (user) {
+    const response = await apiClient.delete("/cart/remove", {
+      cartItemId: item._id,
+    });
+
+    if (response.ok) {
       window.dispatchEvent(new CustomEvent("cartUpdated"));
+      getCartCount({ silent: true });
+      applyLinkedDiscountsToCart();
+      checkLinkedOffersForCart();
+      toast.success(response.data.message || "Done!");
     }
-  };
+  } else {
+    removeFromCart(item._id);
+    toast.success("Item removed from cart!");
+    window.dispatchEvent(new CustomEvent("cartUpdated"));
+  }
+}, [user, removeFromCart, getCartCount, applyLinkedDiscountsToCart, checkLinkedOffersForCart]);
 
-  const handleQuantityChange = async (
-    cartItem,
-    newQuantity,
-    currentQuantity,
-  ) => {
+  // const handleQuantityChange = async (
+  //   cartItem,
+  //   newQuantity,
+  //   currentQuantity,
+  // ) => {
+
+  const handleQuantityChange = useCallback(async (
+  cartItem,
+  newQuantity,
+  currentQuantity,
+) => {
     if (newQuantity < 1) return;
 
     const currentTotalQuantity = getTotalCartQuantity();
@@ -341,7 +372,7 @@ export default function CartSidebar({ isOpen, onClose }) {
     } finally {
       setUpdatingItem(null);
     }
-  };
+ }, [user, cartData, increaseQty, decreaseQty, getTotalCartQuantity, getCartCount]);
 
   const refreshCartData = async () => {
     if (user) {
@@ -439,6 +470,46 @@ export default function CartSidebar({ isOpen, onClose }) {
     };
   }, []);
 
+  const drawerRef = useRef(null);
+const previousFocusRef = useRef(null);
+
+useEffect(() => {
+  if (!isOpen) return;
+
+  previousFocusRef.current = document.activeElement;
+  const drawer = drawerRef.current;
+  if (!drawer) return;
+
+  const focusable = drawer.querySelectorAll(
+    'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  first?.focus();
+
+  const handleKeyDown = (e) => {
+    if (e.key !== "Tab") return;
+    if (focusable.length === 0) {
+      e.preventDefault();
+      return;
+    }
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last?.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first?.focus();
+    }
+  };
+
+  document.addEventListener("keydown", handleKeyDown);
+  return () => {
+    document.removeEventListener("keydown", handleKeyDown);
+    previousFocusRef.current?.focus?.();
+  };
+}, [isOpen]);
+
   // ─────────────────────────────────────────────
   // Single sliding panel — content swaps by state
   // ─────────────────────────────────────────────
@@ -449,10 +520,14 @@ export default function CartSidebar({ isOpen, onClose }) {
           <div className="fixed inset-0 bg-black/40 z-40" onClick={onClose} />
 
           <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+           ref={drawerRef}
+  role="dialog"
+  aria-modal="true"
+  aria-label="Shopping cart"
+  initial={{ x: "100%" }}
+  animate={{ x: 0 }}
+  exit={{ x: "100%" }}
+  transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed lg:rounded-tl-4xl lg:rounded-bl-4xl right-0 top-0 h-full w-full sm:w-lg md:w-sm bg-[#FAFAF6] z-50 flex flex-col font-figtree shadow-2xl font-serif"
           >
             {isInitialLoad ? (

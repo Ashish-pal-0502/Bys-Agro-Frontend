@@ -19,10 +19,12 @@ import ShopDrawer from "./ShopDrawer";
 import Banner from './BannerMessage';
 import useAuth from './../../auth/useAuth';
 import { useCartCount } from './../../hooks/useCartCount';
+import Link from "next/link";
+
 
 const navItems = [
   { name: "Home", href: "/" },
-  { name: "Shop", href: "/shop" },
+  { name: "Shop", drawer: true },
   { name: "About", href: "/about-us" },
   { name: "Blogs", href: "/blogs" },
 
@@ -39,6 +41,9 @@ const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 const dropdownRef = useRef(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isShopDrawerOpen, setIsShopDrawerOpen] = useState(false);
+
+  const [mounted, setMounted] = useState(false);
+useEffect(() => setMounted(true), []);
 
   /* --------------------------------
      Close Shop Drawer with ESC
@@ -91,6 +96,7 @@ const dropdownRef = useRef(null);
   };
 
   const isActive = (path) => {
+     if (!mounted) return false;
     return pathname === path;
   };
 
@@ -131,14 +137,15 @@ const handleLogout = async () => {
               LOGO
           =================================== */}
 
-          <div className="shrink-0">
-            <h1
-              onClick={() => router.push("/")}
-              className="text-3xl cursor-pointer font-serif font-bold text-[#4b2e1e] tracking-tight"
-            >
-            Bys Agro
-            </h1>
-          </div>
+         <h1 className="shrink-0">
+  <Link
+    href="/"
+    aria-label="BYS Agro – Home"
+    className="text-3xl font-serif font-bold text-[#4b2e1e] tracking-tight"
+  >
+    Bys Agro
+  </Link>
+</h1>
 
           {/* ===================================
               DESKTOP NAVIGATION
@@ -150,29 +157,26 @@ const handleLogout = async () => {
                   SHOP
               ================================= */
 
-              if (item.name === "Shop") {
-                return (
-                  <button
-                    key={item.name}
-                    onClick={() => setIsShopDrawerOpen(true)}
-                    className={`flex items-center font-serif gap-1 text-sm font-medium cursor-pointer transition-colors ${
-                      isActive(item.href)
-                        ? "text-[#c1552c]"
-                        : "text-[#312620] hover:text-[#c1552c]"
-                    }`}
-                  >
-                    Shop
-
-                    <ChevronDown
-                      size={14}
-                      strokeWidth={1.8}
-                      className={`transition-transform duration-300 ${
-                        isShopDrawerOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-                );
-              }
+           if (item.drawer) {
+  return (
+    <button
+      key={item.name}
+      onClick={() => setIsShopDrawerOpen(true)}
+      aria-haspopup="dialog"
+      aria-expanded={isShopDrawerOpen}
+      className={`flex items-center font-serif gap-1 text-sm font-medium cursor-pointer transition-colors ${
+        isShopDrawerOpen ? "text-[#c1552c]" : "text-[#312620] hover:text-[#c1552c]"
+      }`}
+    >
+      Shop
+      <ChevronDown
+        size={14}
+        strokeWidth={1.8}
+        className={`transition-transform duration-300 ${isShopDrawerOpen ? "rotate-180" : ""}`}
+      />
+    </button>
+  );
+}
 
               /* ================================
                   OTHER NAV ITEMS

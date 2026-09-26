@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { FiShoppingBag } from "react-icons/fi";
 import { GiPresent } from "react-icons/gi";
 import { IoClose, IoTrashOutline } from "react-icons/io5";
+import { memo } from "react";
 
 // ─────────────────────────────────────────────
 // 1. Loading State (plain content — no slide wrapper)
@@ -99,7 +100,7 @@ export function EmptyCart({ onClose, onStartShopping }) {
 // ─────────────────────────────────────────────
 // 3. Cart Item Row (with all discount logic)
 // ─────────────────────────────────────────────
-export function CartItemRow({
+export const CartItemRow = memo( function CartItemRow({
   item,
   updatingItem,
   getTotalCartQuantity,
@@ -285,12 +286,12 @@ export function CartItemRow({
       </div>
     </motion.div>
   );
-}
+})
 
 // ─────────────────────────────────────────────
 // 4. Breakdown (bottom panel)
 // ─────────────────────────────────────────────
-export function CartBreakdown({
+export const CartBreakdown = memo(function CartBreakdown({
   user,
   backendTotals,
   localTotals,
@@ -444,4 +445,4 @@ export function CartBreakdown({
       </div>
     </div>
   );
-}
+})

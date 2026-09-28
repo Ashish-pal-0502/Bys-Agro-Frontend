@@ -117,7 +117,7 @@ const SearchClient = ({ initialQuery = "" }) => {
   const showNoResults = searchQuery.trim() && !loading && !isSearching && searchResults.length === 0 && !error;
 
   return (
-    <div className="bg-[#faf4ea] font-figtree min-h-screen pt-10">
+    <div className="bg-[#faf4ea] font-serif min-h-screen pt-10">
       <div className="max-w-7xl mx-auto px-4 md:px-8 ">
         {/* Header - Left Aligned */}
         <div className="mb-8">
@@ -203,7 +203,7 @@ const SearchClient = ({ initialQuery = "" }) => {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 pb-5">
                 {searchResults.map((product) => (
                   <ProductCard key={product._id} product={product} />
                 ))}

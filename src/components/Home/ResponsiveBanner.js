@@ -19,7 +19,7 @@ const ResponsiveBanner = ({
   mobileHeight = 420,
 }) => {
   return (
-    <section className="w-full  relative">
+    <section className="w-full font-serif  relative">
       {/* Mobile */}
       <div className="block lg:hidden w-full relative">
         <Image

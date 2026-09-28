@@ -123,7 +123,7 @@ const ProductCard = ({ product }) => {
     : product.weight || '';
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200">
+    <div className="bg-white rounded-xl border font-serif border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200">
       {/* Image */}
       <div className="relative aspect-square overflow-hidden bg-gray-50">
         <Link

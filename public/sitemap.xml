@@ -3,14 +3,14 @@
 
   <sitemap>
     <loc>http://localhost:3000/static/sitemap.xml</loc>
-    <lastmod>2026-09-29T20:56:10.100Z</lastmod>
+    <lastmod>2026-09-30T08:06:01.131Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>http://localhost:3000/product/sitemap-1.xml</loc>
-    <lastmod>2026-09-29T20:56:10.100Z</lastmod>
+    <lastmod>2026-09-30T08:06:01.131Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>http://localhost:3000/blog/sitemap-1.xml</loc>
-    <lastmod>2026-09-29T20:56:10.100Z</lastmod>
+    <lastmod>2026-09-30T08:06:01.131Z</lastmod>
   </sitemap>
 </sitemapindex>

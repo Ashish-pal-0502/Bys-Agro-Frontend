@@ -2,7 +2,7 @@ import { create } from "apisauce";
 import { setAuthCookie, clearAuthCookie } from "./../auth/authCookie";
 
 const apiClient = create({
-  baseURL: process.env.NEXT_PUBLIC_SERVER || "http://3.109.124.131:5000/api",
+  baseURL: process.env.NEXT_PUBLIC_SERVER || "https://backend.bysagro.in/api",
   withCredentials: true,
 });
 

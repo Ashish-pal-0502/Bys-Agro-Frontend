@@ -33,7 +33,7 @@ function ContactPage() {
     {
       icon: Mail,
       title: "Email Us",
-      details: ["support@anaaj.com", "We reply within 24 hours"],
+      details: ["support@bysagro.com", "We reply within 24 hours"],
     },
     {
       icon: Clock,

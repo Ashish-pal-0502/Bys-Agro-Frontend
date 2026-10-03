@@ -130,7 +130,7 @@ const HeroBanner = ({ images = [] }) => {
                 Farm-Graded Staples
               </p>
 
-              <h1 className="font-serif text-[#2D2018] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight animate-heroSlideUp">
+              <h1 className="font-serif uppercase text-[#2D2018] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight animate-heroSlideUp">
                 Pure dal, oil &
                 <br className="hidden sm:block" />
                 spices for the

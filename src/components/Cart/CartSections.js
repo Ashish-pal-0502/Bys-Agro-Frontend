@@ -58,7 +58,7 @@ export function EmptyCart({ onClose, onStartShopping }) {
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           className="w-32 h-32 mb-6 relative"
         >
-          <div className="absolute inset-0 bg-[#E56A5C]/10 rounded-full"></div>
+          <div className="absolute inset-0 bg-[#c1552c]/10 rounded-full"></div>
           <div className="absolute inset-3 bg-amber-100 rounded-full flex items-center justify-center">
             <FiShoppingBag className="text-5xl text-[#E56A5C]" />
           </div>
@@ -88,7 +88,7 @@ export function EmptyCart({ onClose, onStartShopping }) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={onStartShopping}
-          className="bg-[#E56A5C] cursor-pointer text-white px-8 py-3 rounded-xl font-semibold shadow-md hover:shadow-lg transition-all"
+          className="bg-[#c1552c] cursor-pointer text-white px-8 py-3 rounded-xl font-semibold shadow-md hover:shadow-lg transition-all"
         >
           Start Shopping
         </motion.button>

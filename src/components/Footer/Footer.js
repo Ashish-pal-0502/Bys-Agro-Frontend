@@ -184,7 +184,7 @@ const Footer = () => {
 
               {/* Email */}
               <a
-                href="mailto:support@anaaj.com"
+                href="mailto:support@bysagro.com"
                 className="flex items-center gap-3 text-sm text-[#CBBCAF] hover:text-[#F7F2EA] transition-colors"
               >
 
@@ -194,7 +194,7 @@ const Footer = () => {
                   className="shrink-0 text-[#B85C38]"
                 />
 
-                <span>support@anaaj.com</span>
+                <span>support@bysagro.com</span>
 
               </a>
 
@@ -221,7 +221,7 @@ const Footer = () => {
             <p className="text-xs text-[#AFA093] text-center md:text-left">
               © {year}{" "}
               <span className="text-[#D8CBBE]">
-                Anaaj
+                Bys Agro
               </span>
               . All rights reserved.
             </p>

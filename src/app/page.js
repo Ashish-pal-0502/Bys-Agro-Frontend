@@ -81,16 +81,18 @@ async function getTestimonials() {
   }
 }
 
+
 async function getBanner() {
-  try {
-    const res = await fetch(`${SERVER}/variation/banner/get`, REVALIDATE);
-    if (!res.ok) throw new Error("Failed to fetch banner");
-    const data = await res.json();
-    return data.banners || data.banner || [];
-  } catch (error) {
-    console.error("Error fetching banner:", error);
-    return [];
-  }
+  const url = `${SERVER}/variation/banner/get`;
+  const res = await fetch(url, {
+    cache: "no-store",
+    headers: {
+      "Cache-Control": "no-cache",
+    },
+  });
+
+  const data = await res.json();
+  return data.banners || data.banner || [];
 }
 
 async function ShopByCategorySection() {
@@ -110,15 +112,16 @@ async function TestimonialsSection() {
 
   return <Testimonials testimonials={testimonials} />;
 }
-  const bannerImages = await getBanner();
 
-  
-  const slides = bannerImages.map((b) => ({
-    src: b.image || b.imageUrl || b.url,
-    alt: b.alt || b.title || "Banner image",
-  }));
-  
-  export default async function Home() {
+export default async function Home() {
+    const bannerImages = await getBanner();
+//     console.log("bannerImage", bannerImages)
+//     console.log("SERVER:", SERVER);
+// console.log("FULL URL:", `${SERVER}/variation/banner/get`);
+    const slides = bannerImages.map((b) => ({
+      src: b.image || b.imageUrl || b.url,
+      alt: b.alt || b.title || "Banner image",
+    }));
   return (
     <>
       <HeroBanner images={slides} />

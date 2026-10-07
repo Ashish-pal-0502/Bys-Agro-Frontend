@@ -52,7 +52,7 @@ const Footer = () => {
               href="/"
               className="inline-block font-serif text-4xl md:text-5xl font-bold tracking-tight text-[#F7F2EA]"
             >
-              Bys Agro
+              BYS Agro
             </Link>
 
             

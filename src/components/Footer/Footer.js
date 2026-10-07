@@ -55,6 +55,21 @@ const Footer = () => {
               Bys Agro
             </Link>
 
+            
+            {/* <Link
+              href="/"
+            className="shrink-0 flex items-center "
+            >
+             <Image
+    src="/bysMainLogo.png"
+    alt="BYS Agro"
+    width={300}
+    height={90}
+    priority
+    className="h-10 w-auto md:h-16"
+  />
+            </Link> */}
+
             <p className="mt-5 max-w-sm text-sm md:text-[15px] leading-7 text-[#D8CBBE]">
               Thoughtfully sourced staples from trusted Indian farms,
               brought to your kitchen with care.

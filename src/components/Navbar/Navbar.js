@@ -20,6 +20,7 @@ import Banner from './BannerMessage';
 import useAuth from './../../auth/useAuth';
 import { useCartCount } from './../../hooks/useCartCount';
 import Link from "next/link";
+import Image from "next/image";
 
 
 const navItems = [
@@ -141,9 +142,16 @@ const handleLogout = async () => {
   <Link
     href="/"
     aria-label="BYS Agro – Home"
-    className="text-3xl font-serif font-bold text-[#4b2e1e] tracking-tight"
+    className="shrink-0 flex items-center "
   >
-    Bys Agro
+   <Image
+    src="/bysMainLogo.png"
+    alt="BYS Agro"
+    width={300}
+    height={90}
+    priority
+    className="h-10 w-auto md:h-16"
+  />
   </Link>
 </h1>
 

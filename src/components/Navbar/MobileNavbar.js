@@ -16,6 +16,7 @@ import Link from "next/link";
 import apiClient from './../../api/client';
 import useAuth from './../../auth/useAuth';
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 
 const navItems = [
@@ -143,9 +144,16 @@ export default function MobileNavbar({
   href="/"
   onClick={onClose}
   aria-label="BYS Agro – Home"
-  className="font-serif text-2xl font-bold text-[#4b2e1e]"
+  className="shrink-0 flex items-center "
 >
-  Bys Agro
+  <Image
+    src="/bysMainLogo.png"
+    alt="BYS Agro"
+    width={300}
+    height={90}
+    priority
+    className="h-10 w-auto md:h-16"
+  />
 </Link>
 
           <button

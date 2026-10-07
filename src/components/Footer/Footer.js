@@ -236,7 +236,7 @@ const Footer = () => {
             <p className="text-xs text-[#AFA093] text-center md:text-left">
               © {year}{" "}
               <span className="text-[#D8CBBE]">
-                Bys Agro
+                BYS Agro
               </span>
               . All rights reserved.
             </p>

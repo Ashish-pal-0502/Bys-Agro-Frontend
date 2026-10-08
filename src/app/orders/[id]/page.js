@@ -20,6 +20,9 @@ import { MdCancel, MdOutlineLocalShipping } from "react-icons/md";
 import { RiTimerLine } from "react-icons/ri";
 import { IoLocationOutline, IoCheckmarkDoneCircle } from "react-icons/io5";
 import toast from "react-hot-toast";
+import ReviewModal from "./../../../components/Models/ReviewModal";
+import useAuth from "./../../../auth/useAuth";
+import { FiStar } from "react-icons/fi"; 
 
 import apiClient from "./../../../api/client";
 import Loader from './../../../utility/Loader';
@@ -174,6 +177,10 @@ export default function OrderDetailsPage() {
   const [order, setOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuth();
+const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+const [reviewProduct, setReviewProduct] = useState(null); // { _id, name, groupId }
+const [reviewRefreshKey, setReviewRefreshKey] = useState(0);
   const orderId = params.id;
 
   const formatDate = (dateString) => {
@@ -238,6 +245,44 @@ export default function OrderDetailsPage() {
       fetchOrderDetails();
     }
   }, [orderId]);
+
+  //review 
+
+  const openReviewModal = (item) => {
+  
+  if (!user) {
+    toast.error("Please login to write a review");
+    return;
+  }
+  // adjust these fields to match what your order item actually stores
+  setReviewProduct({
+    _id: item.product?._id ,
+    name: item.name,
+    groupId: item.product?.groupId,
+  });
+  setIsReviewModalOpen(true);
+};
+
+const handleCreateReview = async (formData) => {
+
+  try {
+    if (!user) {
+      toast.error("Please login to write a review");
+      return;
+    }
+    const response = await apiClient.post("/product/create-product-review", formData);
+    if (response.ok) {
+      toast.success(response.data.message || "Review added successfully");
+      setIsReviewModalOpen(false);
+      setReviewRefreshKey((k) => k + 1);
+    } else {
+      toast.error(response.data.message || "Failed to add review");
+    }
+  } catch (error) {
+    console.error("Error creating review:", error);
+    toast.error("Something went wrong");
+  }
+};
 
   const getShipmentTrackingTimeline = () => {
     if (!order?.shipment?.liveTrackingData?.shipment_track) {
@@ -426,67 +471,81 @@ export default function OrderDetailsPage() {
                 Order Items ({order.orderItems?.length || 0})
               </h2>
 
-              <div className="space-y-4">
-                {order.orderItems?.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-4 bg-[#faf4ea] rounded-xl hover:bg-[#f5ede1] transition-colors"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-20 h-20 bg-[#faf4ea] rounded-lg flex items-center justify-center overflow-hidden">
-                        <Image
-                          src={item.image || "/placeholder.jpg"}
-                          alt={item.name}
-                          width={64}
-                          height={64}
-                          className="object-contain"
-                        />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-[#2b1b12]">
-                          {item.name}
-                        </h3>
-                        <div className="flex items-center gap-4 mt-1">
-                          <p className="text-sm text-[#655849]">
-                            Qty: {item.qty}
-                          </p>
-                          <span className="text-sm bg-[#faf4ea] text-[#c1552c] px-2 py-0.5 rounded-full">
-                            {item?.itemWeight}g
-                          </span>
-                        </div>
-                        {item.flashId && (
-                          <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full mt-1 inline-block">
-                            Flash Sale
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="flex flex-col items-end">
-                        {item.finalPrice < item.price ? (
-                          <>
-                            <span className="text-lg font-bold text-[#2b1b12]">
-                              ₹{item.finalPrice.toFixed(0)}
-                            </span>
-                            <span className="text-sm text-[#8a8179] line-through">
-                              ₹{item.price.toFixed(0)}
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-lg font-bold text-[#2b1b12]">
-                            ₹{item.price.toFixed(0)}
-                          </span>
-                        )}
-                        <p className="text-sm text-[#655849] mt-1">
-                          Total: ₹
-                          {(item.finalPrice || item.price).toFixed(0) *
-                            item.qty}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="space-y-4">
+  {order.orderItems?.map((item, index) => (
+    <div
+      key={index}
+      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 bg-[#faf4ea] rounded-xl hover:bg-[#f5ede1] transition-colors"
+    >
+      {/* Left: image + details */}
+      <div className="flex items-start sm:items-center gap-3 sm:gap-4 min-w-0 flex-1">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 bg-[#faf4ea] rounded-lg flex items-center justify-center overflow-hidden">
+          <Image
+            src={item.image || "/placeholder.jpg"}
+            alt={item.name}
+            width={64}
+            height={64}
+            className="object-contain"
+          />
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <h3 className="font-semibold text-[#2b1b12] text-sm sm:text-base truncate">
+            {item.name}
+          </h3>
+
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-1">
+            <p className="text-xs sm:text-sm text-[#655849]">
+              Qty: {item.qty}
+            </p>
+            <span className="text-xs sm:text-sm bg-white text-[#c1552c] px-2 py-0.5 rounded-full">
+              {item?.itemWeight}g
+            </span>
+          </div>
+
+          {item.flashId && (
+            <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full mt-1 inline-block">
+              Flash Sale
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Right: price + action */}
+      <div className="flex sm:flex-col items-end sm:items-end justify-between sm:justify-start gap-3 sm:gap-0 sm:text-right shrink-0">
+        <div className="flex flex-col items-start sm:items-end">
+          {item.finalPrice < item.price ? (
+            <>
+              <span className="text-base sm:text-lg font-bold text-[#2b1b12]">
+                ₹{item.finalPrice.toFixed(0)}
+              </span>
+              <span className="text-xs sm:text-sm text-[#8a8179] line-through">
+                ₹{item.price.toFixed(0)}
+              </span>
+            </>
+          ) : (
+            <span className="text-base sm:text-lg font-bold text-[#2b1b12]">
+              ₹{item.price.toFixed(0)}
+            </span>
+          )}
+          <p className="text-xs sm:text-sm text-[#655849] mt-1">
+            Total: ₹{(item.finalPrice || item.price).toFixed(0) * item.qty}
+          </p>
+        </div>
+
+        {/* {uiStatus === "Delivered" && ( */}
+          <button
+            onClick={() => openReviewModal(item)}
+            className="sm:mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#c1552c] border border-[#c1552c] rounded-lg hover:bg-[#c1552c] hover:text-white transition-colors cursor-pointer whitespace-nowrap"
+          >
+            <FiStar size={12} />
+            Write Review
+          </button>
+        {/* )} */}
+      </div>
+    </div>
+  ))}
+</div>
             </div>
 
             <div className="bg-white rounded-2xl shadow-sm border border-[#e6ded2] p-6">
@@ -740,7 +799,6 @@ export default function OrderDetailsPage() {
               <h2 className="text-xl font-bold text-[#2b1b12] mb-6">
                 Order Summary
               </h2>
-
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between text-[#655849]">
                   <span>Items Price</span>
@@ -756,6 +814,30 @@ export default function OrderDetailsPage() {
                   </div>
                 )}
 
+        
+
+{Number(order?.codHandlingCharge) > 0 && (
+  <div className="flex justify-between text-amber-600">
+    <span>COD Handling Charge</span>
+    <span className="font-semibold">
+      +₹{Number(order.codHandlingCharge).toFixed(0)}
+    </span>
+  </div>
+)}
+
+{Number(order?.extraDiscount) > 0 && (
+  <div className="flex justify-between text-green-600">
+    <span>
+      {order.paymentMethod === "PREPAID"
+        ? "Online Payment Discount"
+        : "Special Discount"}
+      {/* {` (${order.extraDiscount}%)`} */}
+    </span>
+    <span className="font-semibold">
+      -₹{Math.round((Number(order.itemsPrice) * Number(order.extraDiscount)) / 100)}
+    </span>
+  </div>
+)}
                 <div className="flex justify-between text-[#655849]">
                   <span>Shipping</span>
                   <span className="font-semibold text-[#2b1b12]">
@@ -876,6 +958,14 @@ export default function OrderDetailsPage() {
           </div>
         </div>
       </div>
+      <ReviewModal
+  isOpen={isReviewModalOpen}
+  onClose={() => setIsReviewModalOpen(false)}
+  productId={reviewProduct?._id}
+  productName={reviewProduct?.name}
+  onReviewSubmit={handleCreateReview}
+  user={user}
+/>
     </div>
   );
 }

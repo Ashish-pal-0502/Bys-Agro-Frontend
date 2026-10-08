@@ -217,7 +217,7 @@ export default function CartItemsList({ cartItems, isCartOpen, onToggle }) {
 
                         <div className="flex items-center gap-2">
                           <div className="bg-[#c1552c] rounded-lg border border-gray-200 px-2 py-1">
-                            <span className="text-sm font-medium">
+                            <span className="text-sm font-medium text-white">
                               Qty: {item?.quantity || 1}
                             </span>
                           </div>

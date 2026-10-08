@@ -42,7 +42,7 @@ const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
         category: currentProduct?.category?._id,
         excludeProductId,
       });
-      setYouMayAlsoLikeProducts(response.data.products);
+      setYouMayAlsoLikeProducts(response?.data?.products);
     } catch (err) {
       console.error("Failed to load related products:", err);
     }
@@ -128,7 +128,7 @@ const ProductPageContent = ({ products = [], groupId, initialVisualId }) => {
 
 
       {/* ─── You May Also Like ─── */}
-      {youMayAlsoLikeProducts.length > 0 && (
+      {youMayAlsoLikeProducts?.length > 0 && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 mt-5 ">
           <YouMightAlsoLike youMayAlsoLikeProducts={youMayAlsoLikeProducts} />
         </div>

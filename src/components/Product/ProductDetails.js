@@ -408,7 +408,7 @@ const ProductDetails = ({
                         isActive ? "text-[#B85C38]" : "text-[#2b1b12]"
                       }`}
                     >
-                      {v.weight}
+                      {v.weight}g
                     </p>
                     <p className="text-[11px] text-gray-500 mt-0.5">₹{v.price}</p>
                     {isActive && (

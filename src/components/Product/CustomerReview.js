@@ -84,7 +84,7 @@ function CustomerReview({
           </div>
         </div>
 
-        {user && reviews.length > 0 && (
+        {/* {user && reviews.length > 0 && (
           <button
             onClick={handleCreateReview}
             className="group inline-flex items-center gap-2 bg-linear-to-r from-[#2d5016] to-[#4a7c23] text-white px-5 py-2.5 rounded-full font-medium text-sm shadow-lg shadow-[#2d5016]/20 hover:shadow-xl hover:shadow-[#2d5016]/30 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
@@ -92,7 +92,7 @@ function CustomerReview({
             <FiPlus className="text-base group-hover:rotate-90 transition-transform duration-300" />
             Write a Review
           </button>
-        )}
+        )} */}
       </div>
 
       {reviews.length === 0 ? (
@@ -115,7 +115,7 @@ function CustomerReview({
               </p>
             </div>
 
-            {user && (
+            {/* {user && (
               <button
                 onClick={handleCreateReview}
                 className="mt-2 inline-flex items-center gap-2 bg-linear-to-r from-[#2d5016] to-[#4a7c23] text-white px-7 py-3 rounded-full font-semibold text-sm shadow-lg shadow-[#2d5016]/20 hover:shadow-xl hover:scale-[1.03] active:scale-95 transition-all cursor-pointer"
@@ -123,7 +123,7 @@ function CustomerReview({
                 <FiPlus className="text-base" />
                 Write the First Review
               </button>
-            )}
+            )} */}
           </div>
         </div>
       ) : (

@@ -402,7 +402,7 @@ export default function CheckoutContent() {
           key: result?.data?.notes?.key,
           amount: result?.data?.amount,
           currency: "INR",
-          name: "Bys Agro",
+          name: "BYS Agro Pvt. Ltd.",
           description: "Order Transaction",
           image: "https://bysagro.com/LogoR.webp",
           order_id: result?.data?.id,

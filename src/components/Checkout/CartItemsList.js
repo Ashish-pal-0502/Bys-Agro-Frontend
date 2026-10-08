@@ -174,7 +174,7 @@ export default function CartItemsList({ cartItems, isCartOpen, onToggle }) {
                           <p className="text-xs text-gray-500 mt-0.5">
                             {item?.product?.weight ||
                               item?.weight ||
-                              "Standard weight"}
+                              "Standard weight"}g
                           </p>
 
                           {isComboDiscount && (

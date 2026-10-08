@@ -205,7 +205,7 @@ export const CartItemRow = memo( function CartItemRow({
                 {item?.product?.name}
               </h4>
               <p className="text-xs text-gray-500 mt-0.5">
-                {item?.product?.weight}
+                {item?.product?.weight}g
               </p>
 
               {isComboDiscount && (

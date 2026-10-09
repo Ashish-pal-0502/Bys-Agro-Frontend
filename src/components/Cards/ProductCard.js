@@ -10,6 +10,16 @@ import apiClient from "./../../api/client";
 import useAuth from "./../../auth/useAuth";
 import { ShoppingBag } from "lucide-react";
 
+const formatWeight = (weight, unit = "g") => {
+  const w = Number(weight);
+  if (!w && w !== 0) return "";
+  // Convert grams → kg when >= 1000
+  if (unit === "g" && w >= 1000) {
+    return `${w / 1000}kg`;
+  }
+  return `${w}${unit}`;
+};
+
 const ProductCard = ({ product }) => {
   const { addToCart, getTotalQuantity } = useCartStore();
   const { user } = useAuth();
@@ -118,9 +128,9 @@ const ProductCard = ({ product }) => {
   const discountedPrice = product.discount 
     ? Math.round(product.price * (1 - product.discount / 100))
     : product.price;
-  const weightDisplay = product.weight 
-    ? `${product.weight}${product.weightUnit || 'g'}` 
-    : product.weight || '';
+const weightDisplay = product.weight
+  ? formatWeight(product.weight, product.weightUnit || "g")
+  : "";
 
   return (
     <div className="bg-white rounded-xl border font-serif border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200">

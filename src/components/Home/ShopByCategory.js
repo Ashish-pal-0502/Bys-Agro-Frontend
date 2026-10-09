@@ -173,8 +173,8 @@ const ShopByCategory = ({ categories = [] }) => {
             ))}
           </div>
 
-          <div className="absolute right-0 top-0 bottom-0 w-12 bg-linear-to-l from-[#F7F2EA] to-transparent pointer-events-none"></div>
-          <div className="absolute left-0 top-0 bottom-0 w-12 bg-linear-to-r from-[#F7F2EA] to-transparent pointer-events-none"></div>
+          {/* <div className="absolute right-0 top-0 bottom-0 w-12 bg-linear-to-l from-[#F7F2EA] to-transparent pointer-events-none"></div>
+          <div className="absolute left-0 top-0 bottom-0 w-12 bg-linear-to-r from-[#F7F2EA] to-transparent pointer-events-none"></div> */}
         </div>
 
         {/* <div className="md:hidden flex justify-center mt-6">

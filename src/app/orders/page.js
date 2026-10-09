@@ -181,7 +181,7 @@ export default function OrdersPage() {
       <p className="text-[#655849]">Track and manage your purchases</p>
     </div>
 
-
+{/* 
           {orders.length > 0 && (
           <div className="mt-8 bg-white rounded-2xl shadow-sm border border-[#e6ded2] p-6 mb-8">
             <h3 className="text-xl font-bold text-[#2b1b12] mb-4">
@@ -231,7 +231,7 @@ export default function OrdersPage() {
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
         {orders.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-[#e6ded2]">

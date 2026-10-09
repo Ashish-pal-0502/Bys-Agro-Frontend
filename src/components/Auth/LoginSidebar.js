@@ -2,7 +2,7 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { useState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
-import { X } from "lucide-react";
+import { X , Sprout } from "lucide-react";
 import { useCartStore } from "./../../stores/cartStore";
 import useAuth from './../../auth/useAuth';
 import apiClient from './../../api/client';
@@ -196,9 +196,9 @@ useEffect(() => {
             response?.data?._id,
             apiClient,
           );
-          if (synced) {
-            toast.success("Your cart items have been saved to your account!");
-          }
+          // if (synced) {
+          //   toast.success("Your cart items have been saved to your account!");
+          // }
         }
 
 
@@ -264,8 +264,8 @@ const isDisabled = !isMobileValid;
         </div>
 
    
-        <div className="p-6 overflow-y-auto h-[calc(100%-80px)]">
-          <div className="max-w-sm mx-auto">
+       <div className="p-6 overflow-y-auto h-[calc(100%-80px)] flex items-center justify-center">
+  <div className="max-w-sm w-full">
             {/* <p className="text-[#5a4a3a] text-sm mb-6">
         Enter your mobile number to receive a verification code.
             </p> */}
@@ -335,17 +335,47 @@ const isDisabled = !isMobileValid;
 
           
             <div className="flex flex-col gap-3">
-              <div className="w-full flex justify-center">
-                <GoogleLogin
-                  onSuccess={handleGoogleLogin}
-                  onError={handleGoogleLoginError}
-                  size="large"
-                  text="signin_with"
-                  shape="rectangular"
-                  theme="outline"
-                />
-              </div>
 
+      {/* Welcome illustration */}
+<div className="text-center mb-8">
+  <div className="w-20 h-20 mx-auto rounded-full bg-[#faf4ea] flex items-center justify-center mb-4">
+    <Sprout size={40} className="text-[#c1552c]" strokeWidth={1.8} />
+  </div>
+  <h3 className="text-2xl font-serif font-bold text-[#2b1b12]">
+    Sign in to BYS Agro
+  </h3>
+  <p className="text-sm text-[#8a8179] mt-2">
+    Fresh products, delivered to your door
+  </p>
+</div>
+         <div className="w-full google-btn-wrapper flex justify-center">
+  <GoogleLogin
+    onSuccess={handleGoogleLogin}
+    onError={handleGoogleLoginError}
+    size="large"
+    text="signin_with"
+    shape="rectangular"
+    theme="outline"
+    width="360"
+  />
+</div>
+
+              <div className="mt-8 pt-6 border-t border-[#e9e1d7]">
+  <div className="grid grid-cols-3 gap-3 text-center">
+    <div>
+      <p className="text-lg font-serif font-bold text-[#c1552c]">10K+</p>
+      <p className="text-xs text-[#8a8179] mt-1">Happy customers</p>
+    </div>
+    <div>
+      <p className="text-lg font-serif font-bold text-[#c1552c]">100%</p>
+      <p className="text-xs text-[#8a8179] mt-1">Farm fresh</p>
+    </div>
+    <div>
+      <p className="text-lg font-serif font-bold text-[#c1552c]">24/7</p>
+      <p className="text-xs text-[#8a8179] mt-1">Support</p>
+    </div>
+  </div>
+</div>
            
             </div>
 

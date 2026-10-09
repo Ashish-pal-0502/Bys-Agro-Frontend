@@ -23,17 +23,17 @@ function ContactPage() {
     {
       icon: MapPin,
       title: "Visit Us",
-      details: ["123 Farm Road", "New Delhi, India 110001"],
+      details: ["Regd. Office: 317, Experio, Vibhuti Khand, Gomtinagar, Lucknow-226010, Uttar Pradesh"],
     },
     {
       icon: Phone,
       title: "Call Us",
-      details: ["+91 98765 43210", "Mon-Sat, 9AM - 9PM"],
+      details: ["0522 4248073", "Mon-Sat, 9AM - 9PM"],
     },
     {
       icon: Mail,
       title: "Email Us",
-      details: ["support@bysagro.com", "We reply within 24 hours"],
+      details: ["care@bysagro.in", "We reply within 24 hours"],
     },
     {
       icon: Clock,
@@ -194,7 +194,7 @@ function ContactPage() {
 
               <div className="mt-6 bg-[#faf4ea] rounded-2xl overflow-hidden border border-[#e6ded2] h-80 relative">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.3419385820617!2d77.2235509!3d28.6139391!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce2d1a8c07c43%3A0x6f5af3676e33f0c4!2sNew%20Delhi%2C%20Delhi!5e0!3m2!1sen!2sin!4v1700000000000"
+                  src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d7118.225913432127!2d81.00607463737484!3d26.868152077380344!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1s317%20Experio%20Vibhuti%20Khand%20Gomtinagar%20Lucknow%20226010!5e0!3m2!1sen!2sin!4v1791557132297!5m2!1sen!2sin"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
@@ -202,13 +202,15 @@ function ContactPage() {
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   className="absolute inset-0 w-full h-full"
-                  title="BYS Agro Location"
+                  title="BYS Agro Pvt. Ltd. Location"
                 ></iframe>
+
+                {/* <iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d7118.225913432127!2d81.00607463737484!3d26.868152077380344!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1s317%20Experio%20Vibhuti%20Khand%20Gomtinagar%20Lucknow%20226010!5e0!3m2!1sen!2sin!4v1791557132297!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe> */}
               </div>
 
               <div className="mt-4 flex items-center gap-3 text-sm text-[#5a4a3a]">
                 <MapPin size={18} className="text-[#c1552c] shrink-0" />
-                <span>123 Farm Road, New Delhi, India 110001</span>
+                <span>317, Experio, Vibhuti Khand, Gomtinagar, Lucknow-226010, Uttar Pradesh</span>
               </div>
             </div>
           </div>

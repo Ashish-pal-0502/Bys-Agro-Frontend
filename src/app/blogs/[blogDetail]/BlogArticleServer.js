@@ -93,7 +93,7 @@ export default function BlogArticleServer({ blog }) {
           </div>
           <div>
             <h4 className="font-semibold text-[#2b1b12]">
-              {blog?.user || "BYS Agro Team"}
+              { "BYS Agro Team"}
             </h4>
             <p className="text-sm text-[#5a4a3a]">
               Sharing stories from Indian farms and kitchens.

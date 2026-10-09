@@ -174,7 +174,7 @@ const Footer = () => {
                 />
 
                 <span className="text-sm leading-5 text-[#CBBCAF]">
-                  New Delhi, India
+              Regd. Office: 317, Experio, Vibhuti Khand, Gomtinagar, Lucknow-226010, Uttar Pradesh
                 </span>
 
               </div>
@@ -182,7 +182,7 @@ const Footer = () => {
 
               {/* Phone */}
               <a
-                href="tel:+919876543210"
+                href="tel:0522 4248073"
                 className="flex items-center gap-3 text-sm text-[#CBBCAF] hover:text-[#F7F2EA] transition-colors"
               >
 
@@ -192,14 +192,14 @@ const Footer = () => {
                   className="shrink-0 text-[#B85C38]"
                 />
 
-                <span>+91 98765 43210</span>
+                <span>0522 4248073</span>
 
               </a>
 
 
               {/* Email */}
               <a
-                href="mailto:support@bysagro.com"
+                href="mailto:care@bysagro.in"
                 className="flex items-center gap-3 text-sm text-[#CBBCAF] hover:text-[#F7F2EA] transition-colors"
               >
 
@@ -209,7 +209,7 @@ const Footer = () => {
                   className="shrink-0 text-[#B85C38]"
                 />
 
-                <span>support@bysagro.com</span>
+                <span>care@bysagro.in</span>
 
               </a>
 

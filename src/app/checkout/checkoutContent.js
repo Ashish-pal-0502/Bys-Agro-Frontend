@@ -404,7 +404,7 @@ export default function CheckoutContent() {
           currency: "INR",
           name: "BYS Agro Pvt. Ltd.",
           description: "Order Transaction",
-          image: "https://bysagro.com/LogoR.webp",
+          image: "https://bys-agro-bucket.s3.ap-south-1.amazonaws.com/1791555211807_371822771.png",
           order_id: result?.data?.id,
           handler: async (res) => {
             try {

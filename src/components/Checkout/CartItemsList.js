@@ -4,6 +4,15 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { GiPresent } from "react-icons/gi";
 
+const formatWeight = (weight, unit = "g") => {
+  const w = Number(weight);
+  if (!w && w !== 0) return "";
+  if (unit === "g" && w >= 1000) {
+    return `${w / 1000}kg`;
+  }
+  return `${w}${unit}`;
+};
+
 export default function CartItemsList({ cartItems, isCartOpen, onToggle }) {
   return (
     <div className="mb-6">
@@ -171,11 +180,14 @@ export default function CartItemsList({ cartItems, isCartOpen, onToggle }) {
                           <h4 className="font-semibold text-gray-800 text-sm line-clamp-2">
                             {item?.product?.name || item?.name}
                           </h4>
-                          <p className="text-xs text-gray-500 mt-0.5">
-                            {item?.product?.weight ||
-                              item?.weight ||
-                              "Standard weight"}g
-                          </p>
+                       <p className="text-xs text-gray-500 mt-0.5">
+  {item?.product?.weight || item?.weight
+    ? formatWeight(
+        item?.product?.weight || item?.weight,
+        item?.product?.weightUnit || item?.weightUnit || "g"
+      )
+    : "Standard weight"}
+</p>
 
                           {isComboDiscount && (
                             <div className="flex items-center gap-1.5 mt-1">

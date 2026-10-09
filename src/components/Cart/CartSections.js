@@ -9,6 +9,15 @@ import { GiPresent } from "react-icons/gi";
 import { IoClose, IoTrashOutline } from "react-icons/io5";
 import { memo } from "react";
 
+const formatWeight = (weight, unit = "g") => {
+  const w = Number(weight);
+  if (!w && w !== 0) return "";
+  if (unit === "g" && w >= 1000) {
+    return `${w / 1000}kg`;
+  }
+  return `${w}${unit}`;
+};
+
 // ─────────────────────────────────────────────
 // 1. Loading State (plain content — no slide wrapper)
 // ─────────────────────────────────────────────
@@ -205,7 +214,8 @@ export const CartItemRow = memo( function CartItemRow({
                 {item?.product?.name}
               </h4>
               <p className="text-xs text-gray-500 mt-0.5">
-                {item?.product?.weight}g
+                {/* {item?.product?.weight}g */}
+                  {formatWeight(item?.product?.weight, item?.product?.weightUnit || "g")}
               </p>
 
               {isComboDiscount && (

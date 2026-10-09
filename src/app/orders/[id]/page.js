@@ -533,7 +533,7 @@ const handleCreateReview = async (formData) => {
           </p>
         </div>
 
-        {/* {uiStatus === "Delivered" && ( */}
+        {uiStatus === "Delivered" && (
           <button
             onClick={() => openReviewModal(item)}
             className="sm:mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#c1552c] border border-[#c1552c] rounded-lg hover:bg-[#c1552c] hover:text-white transition-colors cursor-pointer whitespace-nowrap"
@@ -541,7 +541,7 @@ const handleCreateReview = async (formData) => {
             <FiStar size={12} />
             Write Review
           </button>
-        {/* )} */}
+        )}
       </div>
     </div>
   ))}

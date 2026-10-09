@@ -26,6 +26,16 @@ import ProductStickyBar from './ProductStickyBar';
 // import LinkedOffers from "../Offers/LinkedOffers";
 import LinkedOffers from './LinkedOffers';
 
+const formatWeight = (weight, unit = "g") => {
+  const w = Number(weight);
+  if (!w && w !== 0) return "";
+  // Convert grams → kg when >= 1000
+  if (unit === "g" && w >= 1000) {
+    return `${w / 1000}kg`;
+  }
+  return `${w}${unit}`;
+};
+
 const ProductDetails = ({
   products,
   groupId,
@@ -86,6 +96,7 @@ const ProductDetails = ({
         price: finalPrice,
         oldPrice: originalPrice,
         weight: product.weight || "250g",
+        weightUnit: product?.weightUnit || "g", 
         save: saveAmount,
         product,
       };
@@ -408,7 +419,8 @@ const ProductDetails = ({
                         isActive ? "text-[#B85C38]" : "text-[#2b1b12]"
                       }`}
                     >
-                      {v.weight}g
+                      {/* {v.weight}g */}
+                      {formatWeight(v.weight, v.weightUnit)}
                     </p>
                     <p className="text-[11px] text-gray-500 mt-0.5">₹{v.price}</p>
                     {isActive && (

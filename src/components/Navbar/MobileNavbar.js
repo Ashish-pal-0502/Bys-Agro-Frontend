@@ -8,6 +8,7 @@ import {
   X,
   ChevronDown,
   ArrowRight,
+  Package
 } from "lucide-react";
 
 import { useState, useEffect } from "react";
@@ -367,6 +368,29 @@ export default function MobileNavbar({
             </p>
 
             <div className="space-y-1">
+
+               {user && (
+    <button
+      onClick={() => handleNavigation("/orders")}
+      className="w-full flex items-center gap-3 px-3 py-3.5 rounded-xl text-sm font-medium text-[#312620] hover:bg-[#faf4ea] transition-colors"
+    >
+      <Package size={19} strokeWidth={1.7} />
+      <span className="flex-1 text-left">My Orders</span>
+      <ArrowRight size={15} className="text-[#a0968c]" />
+    </button>
+  )}
+
+
+                {user && (
+    <button
+      onClick={() => handleNavigation("/profile")}
+      className="w-full flex items-center gap-3 px-3 py-3.5 rounded-xl text-sm font-medium text-[#312620] hover:bg-[#faf4ea] transition-colors"
+    >
+      <User size={19} strokeWidth={1.7} />
+      <span className="flex-1 text-left">My Profile</span>
+      <ArrowRight size={15} className="text-[#a0968c]" />
+    </button>
+  )}
 
               {/* Cart */}
 
